@@ -1,0 +1,48 @@
+package graphalgos;
+
+
+import java.net.URI;
+import java.util.Iterator;
+
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.traverse.DepthFirstIterator;
+
+/**
+ * Hello world!
+ *
+ */
+public class Sandbox 
+{
+    public static void main( String[] args )
+    {
+    	Graph<String, DefaultEdge> g = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        String google = "http://www.google.com";
+        String wikipedia = "http://www.wikipedia.org";
+        String jgrapht = "http://www.jgrapht.org";
+
+        // add the vertices
+        g.addVertex(google);
+        g.addVertex(wikipedia);
+        g.addVertex(jgrapht);
+
+        // add edges to create linking structure
+        g.addEdge(jgrapht, wikipedia);
+        g.addEdge(google, jgrapht);
+        g.addEdge(google, wikipedia);
+        g.addEdge(wikipedia, google);
+        
+        String start = g.vertexSet().stream().filter(str -> str.equals("http://www.jgrapht.org")).findAny().get();
+        System.out.println(start);
+        
+        Iterator<String> iterator = new DepthFirstIterator<>(g, start);
+        while (iterator.hasNext()) {
+            String str = iterator.next();
+            System.out.println(str);
+        }
+    
+        
+    }
+}
