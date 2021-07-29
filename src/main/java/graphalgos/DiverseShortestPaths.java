@@ -27,7 +27,7 @@ public class DiverseShortestPaths {
 		this.g = g;
 	}
 		
-	
+	//#1: 不要な辺を削除
 	public Graph<String, DefaultWeightedEdge> edgeRemoval(String source, String target){
 		
 		/*initialization of shortest path class (Bellman-Ford)
@@ -67,7 +67,7 @@ public class DiverseShortestPaths {
 					purgeList.add(edge);
 					//System.out.println(String.format("Mercilessly Purging : (%s, %s) ", u, v));
 				} else {
-					//System.out.println("Target to add: " + v);
+					//System.out.println("Adding the next vertex to the queue: " + v);
 					vertexQ.addFirst(v);
 				}
 				
@@ -79,7 +79,7 @@ public class DiverseShortestPaths {
 			
 		}
 		
-		//System.out.println("Done with the for loop");
+		//System.out.println("Done with the DFS");
 		
 		this.stPathsSize = g.edgeSet().size();
 		
@@ -87,6 +87,7 @@ public class DiverseShortestPaths {
 
 	}
 	
+	//#2 k-duplication
 	public Graph<String, DefaultWeightedEdge> kDuplication(int k){
 		
 		
@@ -116,12 +117,12 @@ public class DiverseShortestPaths {
 		
 	}
 	
-	
-	public Map<DefaultWeightedEdge, Double> minCostFlow(Graph<String, DefaultWeightedEdge> gMulti, String source, String target, int k){
+	//#3 minCostFlowでFlow Networkを求める
+	public Graph<String, DefaultWeightedEdge> minCostFlow(Graph<String, DefaultWeightedEdge> gMulti, String source, String target, int k){
 		
 		Function<DefaultWeightedEdge, Integer> minCapacity = edge -> 0;
 		Function<DefaultWeightedEdge, Integer> maxCapacity = edge -> 1;
-		Function<DefaultWeightedEdge, Double> arcCost = edge -> gMulti.getEdgeWeight(edge);
+		Function<DefaultWeightedEdge, Double> arcCost = edge -> -gMulti.getEdgeWeight(edge);
 		Function<String, Integer> supplyDemand = vertex -> {
 			
 			if(vertex.equals(source)) {
@@ -138,21 +139,37 @@ public class DiverseShortestPaths {
 			
 		};
 		
+		//mincostflow 計算
 		MinimumCostFlowProblem<String, DefaultWeightedEdge> problem = new MinimumCostFlowProblemImpl<>(gMulti, supplyDemand, maxCapacity, minCapacity, arcCost);  
 		MinimumCostFlowAlgorithm<String, DefaultWeightedEdge> solver = new CapacityScalingMinimumCostFlow<>();
-		
 		Map<DefaultWeightedEdge, Double> flowMap = solver.getMinimumCostFlow(problem).getFlowMap();
+		
+		
+		Graph<String, DefaultWeightedEdge> flowNet = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+		
 		flowMap.keySet().forEach(edge -> {
 			
 			double flo = flowMap.get(edge);
-			if(flo > 0.0d) System.out.println(String.format("edge: %s, flow: %s", edge.toString(), flo));
+			if(flo > 0.0d) {
+				
+				String u = gMulti.getEdgeSource(edge);
+				String v = gMulti.getEdgeTarget(edge);
+				
+				flowNet.addVertex(u);
+				flowNet.addVertex(v);
+				DefaultWeightedEdge networkEdge = flowNet.addEdge(u, v);
+				flowNet.setEdgeWeight(networkEdge, g.getEdgeWeight(g.getEdge(u, v)));
+				
+				System.out.println(String.format("edge: %s, flow: %s", edge.toString(), flo));
+			}
 			
 		});
 		
-		return flowMap;
-		
+		return flowNet;
 		
 	}
+	
+	
 	
 
 }

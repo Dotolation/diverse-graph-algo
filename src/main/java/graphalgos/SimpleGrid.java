@@ -14,7 +14,7 @@ public class SimpleGrid {
 	public int x;
 	public int y;
 	
-	public String source = "<1|1>";
+	public String source = "1|1";
 	public String target;
 	
 	protected Graph<String, DefaultWeightedEdge> graph;
@@ -24,7 +24,7 @@ public class SimpleGrid {
 		this.x = x;
 		this.y = y;
 		
-		target = String.format("<%s|%s>", x, y);
+		target = String.format("%s|%s", x, y);
 		
 		Supplier<String> defaultvSupplier = new Supplier<String>()
         {
@@ -33,7 +33,7 @@ public class SimpleGrid {
             @Override
             public String get()
             {
-            	return String.format("<%s|%s>", (id%x) + 1, id++/x + 1);
+            	return String.format("%s|%s", (id%x) + 1, id++/x + 1);
             }
         };
         
