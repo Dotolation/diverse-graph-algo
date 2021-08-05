@@ -12,6 +12,7 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 
 public class DiverseShortestPaths {
@@ -31,12 +32,12 @@ public class DiverseShortestPaths {
 		
 		preprocess();
 		minCostFlow();
-		System.out.println(kDuplicate.edgeSet());
+		System.out.println(this.pathsAsGraph().edgeSet().size());
 		
 	}
 		
 	//#1: 不要な辺を削除 + kDuplication 
-	public void preprocess(){
+	private void preprocess(){
 		
 		/*initialization of shortest path class (Bellman-Ford)
 		  https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html
@@ -75,7 +76,7 @@ public class DiverseShortestPaths {
 	}
 	
 	//#2 minCostFlowでFlow Networkを求める
-	public void minCostFlow(){
+	private void minCostFlow(){
 		
 		Function<DefaultWeightedEdge, Integer> minCapacity = edge -> 0;
 		Function<DefaultWeightedEdge, Integer> maxCapacity = edge -> 1;
@@ -108,10 +109,29 @@ public class DiverseShortestPaths {
 			if(!(flow > 0.0d)) {
 				kDuplicate.removeEdge(edge);
 
-			}
+			} 
 			
 		});
 		
 	}
+	
+	public Graph<String, DefaultWeightedEdge> pathsAsGraph(){
+		Graph<String, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+		
+		kDuplicate.edgeSet().forEach(e -> {
+			
+			String u = g.getEdgeSource(e);
+			String v = g.getEdgeTarget(e);
+			graph.addVertex(u);
+			graph.addVertex(v);
+			
+			DefaultWeightedEdge original = g.getEdge(u, v);
+			
+			graph.addEdge(u, v, original);
+		});
+		
+		return graph; 
+	}
+	
 
 }

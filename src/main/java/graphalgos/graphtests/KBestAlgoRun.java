@@ -1,5 +1,6 @@
 package graphalgos.graphtests;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.jgrapht.Graph;
@@ -12,11 +13,7 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 public class KBestAlgoRun implements DemoRun {
 	
 public KBestAlgoRun(Graph<String, DefaultWeightedEdge> g, String source, String target, int k) {
-		
-		/*
-		 * k-best enumeration. 
-		 * 
-		 */
+
 		
 		System.out.println("---k-best enumeration---");
 		
@@ -25,10 +22,24 @@ public KBestAlgoRun(Graph<String, DefaultWeightedEdge> g, String source, String 
 		
 		Graph<String, DefaultWeightedEdge> kBestGraph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 		
+		
 		for(GraphPath<String, DefaultWeightedEdge> path : kPaths) {
-			System.out.println(path.getEdgeList());
+			
+			path.getEdgeList().forEach(e -> {
+				
+				String u = g.getEdgeSource(e);
+				String v = g.getEdgeTarget(e);
+				
+				kBestGraph.addVertex(u);
+				kBestGraph.addVertex(v);
+				kBestGraph.addEdge(u, v, e);
+
+				
+			});
 			
 		}
+		
+		System.out.println(kBestGraph.edgeSet().size());
 
 	}
 
