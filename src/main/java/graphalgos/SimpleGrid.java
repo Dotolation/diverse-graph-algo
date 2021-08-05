@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 import org.jgrapht.Graph;
 import org.jgrapht.generate.GraphGenerator;
 import org.jgrapht.generate.GridGraphGenerator;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.util.SupplierUtil;
 
 public class SimpleGrid {
@@ -37,7 +37,7 @@ public class SimpleGrid {
             }
         };
         
-        graph = new DefaultDirectedWeightedGraph<>(defaultvSupplier, SupplierUtil.createDefaultWeightedEdgeSupplier());
+        graph = new SimpleDirectedWeightedGraph<>(defaultvSupplier, SupplierUtil.createDefaultWeightedEdgeSupplier());
 		GraphGenerator<String, DefaultWeightedEdge, String> gridGenerator = new GridGraphGenerator<>(x, y);
 		gridGenerator.generateGraph(graph);
 		

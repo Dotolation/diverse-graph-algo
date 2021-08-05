@@ -1,29 +1,19 @@
 package graphalgos;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.DirectedWeightedMultigraph;
+import graphalgos.graphtests.DemoRun;
+import graphalgos.graphtests.DiverseAlgoRun;
+import graphalgos.graphtests.KBestAlgoRun;
 
 public class Simulation {
 
 	public static void main(String[] args) {
+		// TODO Auto-generated method stub
 		
-		SimpleGrid grid = new SimpleGrid(3,2);
-		Graph<String, DefaultWeightedEdge> g = grid.graph;
-		
-		System.out.println(g.toString());
-		
-		DiverseShortestPaths divAlgo = new DiverseShortestPaths(g);
+		SimpleGrid grid = new SimpleGrid(6,8);
 		
 		
-		divAlgo.edgeRemoval(grid.source, grid.target);
-		System.out.println(g.toString());
-		
-		Graph<String, DefaultWeightedEdge> gMulti = divAlgo.kDuplication(2);
-		System.out.println(gMulti.toString());
-		
-		Graph<String, DefaultWeightedEdge> flowNet = divAlgo.minCostFlow(gMulti, grid.source, grid.target, 2);
-		System.out.println(flowNet);
+		DemoRun gridTestKBest = new KBestAlgoRun(grid.graph, grid.source, grid.target, 3);
+		DemoRun gridTestDiverse = new DiverseAlgoRun(grid.graph, grid.source, grid.target, 3);
 
 	}
 

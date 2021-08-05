@@ -1,8 +1,9 @@
 package graphalgos;
 
 
-import java.net.URI;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -42,6 +43,14 @@ public class Sandbox
             String str = iterator.next();
             System.out.println(str);
         }
+        
+        Set<Integer> hSet = new HashSet<>();
+        
+        for(int i=0; i < 90000000; i++) {
+        	hSet.add(i);
+        }
+        
+        System.out.println(hSet.add(33));
     
         
     }
