@@ -11,19 +11,23 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import graphalgos.DiverseShortestPaths;
 
-public class DiverseAlgoRun implements DemoRun {
+public class DiverseAlgoRun extends DemoRun {
 	
 	
-	public DiverseAlgoRun(Graph<String, DefaultWeightedEdge> g, String source, String target, int k) {
+	public DiverseAlgoRun(Graph<String, DefaultWeightedEdge> g, String source, String target, int k, String message) {
 		
 		/*
 		 * Diverse Algorithm. 
 		 * 		
 		 */
 		
-		System.out.println("---Diverse Algo---");	
+		System.out.println(String.format("---Diverse Algo: %s---", message));
+		
+		startWatch();
 		
 		DiverseShortestPaths divAlgo = new DiverseShortestPaths(g, source, target, k);
+		
+		stopWatch();
 		
 		
 	}
