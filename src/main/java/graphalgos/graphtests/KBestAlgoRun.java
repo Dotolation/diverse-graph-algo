@@ -1,6 +1,5 @@
 package graphalgos.graphtests;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.jgrapht.Graph;
