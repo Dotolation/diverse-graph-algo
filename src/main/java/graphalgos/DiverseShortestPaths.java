@@ -131,7 +131,6 @@ public class DiverseShortestPaths {
 			
 			String start = source;
 			GraphIterator<String, DefaultWeightedEdge> dfs = new DepthFirstIterator<>(kDuplicate, start);
-			dfs.addTraversalListener(null);
 			
 			while(start != target) {
 				
