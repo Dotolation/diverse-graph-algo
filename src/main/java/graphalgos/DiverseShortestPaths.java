@@ -106,7 +106,7 @@ public class DiverseShortestPaths {
 		MinimumCostFlowProblem<String, DefaultWeightedEdge> problem = new MinimumCostFlowProblemImpl<>(kDuplicate, supplyDemand, maxCapacity, minCapacity, arcCost);  
 		MinimumCostFlowAlgorithm<String, DefaultWeightedEdge> solver = new CapacityScalingMinimumCostFlow<>();
 		Map<DefaultWeightedEdge, Double> flowMap = solver.getMinimumCostFlow(problem).getFlowMap();
-		
+
 		flowMap.keySet().forEach(edge -> {
 			
 			double flow = flowMap.get(edge);
@@ -124,15 +124,13 @@ public class DiverseShortestPaths {
 		
 		List<Set<DefaultWeightedEdge>> pathList = new ArrayList<>();
 		for (DefaultWeightedEdge e : kDuplicate.outgoingEdgesOf(source)) pathList.add(new HashSet<>());
-
-		System.out.println(pathList.size() == k);
 		
 		for(Set<DefaultWeightedEdge> path : pathList) {
 			
 			String start = source;
 			GraphIterator<String, DefaultWeightedEdge> dfs = new DepthFirstIterator<>(kDuplicate, start);
 			
-			while(start != target) {
+			while(!start.equals(target)) {
 				
 				String next = dfs.next();
 				kDuplicate.removeEdge(kDuplicate.getEdge(start, next));
