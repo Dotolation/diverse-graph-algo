@@ -1,6 +1,10 @@
 package graphalgos;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.jgrapht.Graph;
@@ -13,6 +17,8 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.traverse.GraphIterator;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 
 public class DiverseShortestPaths {
@@ -32,7 +38,6 @@ public class DiverseShortestPaths {
 		
 		preprocess();
 		minCostFlow();
-		System.out.println(this.pathsAsGraph().edgeSet().size());
 		
 	}
 		
@@ -115,23 +120,33 @@ public class DiverseShortestPaths {
 		
 	}
 	
-	public Graph<String, DefaultWeightedEdge> pathsAsGraph(){
-		Graph<String, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+	public List<Set<DefaultWeightedEdge>> paths(){
 		
-		kDuplicate.edgeSet().forEach(e -> {
-			
-			String u = g.getEdgeSource(e);
-			String v = g.getEdgeTarget(e);
-			graph.addVertex(u);
-			graph.addVertex(v);
-			
-			DefaultWeightedEdge original = g.getEdge(u, v);
-			
-			graph.addEdge(u, v, original);
-		});
+		List<Set<DefaultWeightedEdge>> pathList = new ArrayList<>();
+		for (DefaultWeightedEdge e : kDuplicate.outgoingEdgesOf(source)) pathList.add(new HashSet<>());
+
+		System.out.println(pathList.size() == k);
 		
-		return graph; 
+		for(Set<DefaultWeightedEdge> path : pathList) {
+			
+			String start = source;
+			GraphIterator<String, DefaultWeightedEdge> dfs = new DepthFirstIterator<>(kDuplicate, start);
+			dfs.addTraversalListener(null);
+			
+			while(start != target) {
+				
+				String next = dfs.next();
+				kDuplicate.removeEdge(kDuplicate.getEdge(start, next));
+				path.add(g.getEdge(start, next));
+				
+				start = next;
+				
+			}
+			
+		}
+		
+		return pathList;
+		
 	}
-	
 
 }
