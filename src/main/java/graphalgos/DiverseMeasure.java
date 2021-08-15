@@ -37,7 +37,7 @@ public class DiverseMeasure {
 			
 		}
 		
-		System.out.println(String.format("Diverse Measure: {}", weight));
+		System.out.println(String.format("Diverse Measure: %f", weight));
 		
 	}
 	
