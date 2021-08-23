@@ -16,21 +16,20 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-import org.jgrapht.traverse.GraphIterator;
 import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.traverse.GraphIterator;
 
 
-public class DiverseShortestPaths {
+public class DiverseShortestPaths <V,E> {
 	
-	private Graph<String, DefaultWeightedEdge> g;
-	private String source;
-	private String target;
+	private Graph<V, E> g;
+	private V source;
+	private V target;
 	private int k;
 	
-	private Graph<String, DefaultWeightedEdge> kDuplicate;
+	private Graph<V, DefaultWeightedEdge> kDuplicate;
 	
-	public DiverseShortestPaths(Graph<String, DefaultWeightedEdge> g, String source, String target, int k) {
+	public DiverseShortestPaths(Graph<V, E> g, V source, V target, int k) {
 		this.g = g;
 		this.k = k; 
 		this.source = source;
@@ -48,16 +47,16 @@ public class DiverseShortestPaths {
 		  https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html
 		  for other shortest path algorithms. 
 		*/
-		SingleSourcePaths<String, DefaultWeightedEdge> shortest = new DijkstraShortestPath<>(g).getPaths(source);
+		SingleSourcePaths<V, E> shortest = new DijkstraShortestPath<>(g).getPaths(source);
 		////System.out.println("Done with single source paths generation");
 
 		//initialization
-		Graph<String, DefaultWeightedEdge> multiGraph = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+		kDuplicate = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
 		
 		//k-duplication. たが、各頂点までの最短経路ではない辺はDuplicationに含まれない。
 		g.edgeSet().forEach(e -> {
-			String u = g.getEdgeSource(e);
-			String v = g.getEdgeTarget(e);
+			V u = g.getEdgeSource(e);
+			V v = g.getEdgeTarget(e);
 			double weight = g.getEdgeWeight(e);
 			
 			double uDist = shortest.getWeight(u);
@@ -67,16 +66,14 @@ public class DiverseShortestPaths {
 				
 				//k-duplication
 				for (int i = 1; i <= k; i++) {
-					multiGraph.addVertex(u);
-					multiGraph.addVertex(v);
-					DefaultWeightedEdge newEdge = multiGraph.addEdge(u, v);
-					multiGraph.setEdgeWeight(newEdge, weight - 2*i + 1);
+					kDuplicate.addVertex(u);
+					kDuplicate.addVertex(v);
+					DefaultWeightedEdge newEdge = kDuplicate.addEdge(u, v);
+					kDuplicate.setEdgeWeight(newEdge, weight - 2*i + 1);
 	            }
 			}
 			
 		});
-
-		kDuplicate = multiGraph; 
 
 	}
 	
@@ -86,7 +83,7 @@ public class DiverseShortestPaths {
 		Function<DefaultWeightedEdge, Integer> minCapacity = edge -> 0;
 		Function<DefaultWeightedEdge, Integer> maxCapacity = edge -> 1;
 		Function<DefaultWeightedEdge, Double> arcCost = edge -> -kDuplicate.getEdgeWeight(edge);
-		Function<String, Integer> supplyDemand = vertex -> {
+		Function<V, Integer> supplyDemand = vertex -> {
 			
 			if(vertex.equals(source)) {
 				
@@ -103,8 +100,8 @@ public class DiverseShortestPaths {
 		};
 		
 		//mincostflow 計算
-		MinimumCostFlowProblem<String, DefaultWeightedEdge> problem = new MinimumCostFlowProblemImpl<>(kDuplicate, supplyDemand, maxCapacity, minCapacity, arcCost);  
-		MinimumCostFlowAlgorithm<String, DefaultWeightedEdge> solver = new CapacityScalingMinimumCostFlow<>();
+		MinimumCostFlowProblem<V, DefaultWeightedEdge> problem = new MinimumCostFlowProblemImpl<>(kDuplicate, supplyDemand, maxCapacity, minCapacity, arcCost);  
+		MinimumCostFlowAlgorithm<V, DefaultWeightedEdge> solver = new CapacityScalingMinimumCostFlow<>();
 		Map<DefaultWeightedEdge, Double> flowMap = solver.getMinimumCostFlow(problem).getFlowMap();
 
 		flowMap.keySet().forEach(edge -> {
@@ -120,19 +117,20 @@ public class DiverseShortestPaths {
 		
 	}
 	
-	public List<Set<DefaultWeightedEdge>> paths(){
+	@SuppressWarnings("unused")
+	public List<Set<E>> paths(){
 		
-		List<Set<DefaultWeightedEdge>> pathList = new ArrayList<>();
+		List<Set<E>> pathList = new ArrayList<>();
 		for (DefaultWeightedEdge e : kDuplicate.outgoingEdgesOf(source)) pathList.add(new HashSet<>());
 		
-		for(Set<DefaultWeightedEdge> path : pathList) {
+		for(Set<E> path : pathList) {
 			
-			String start = source;
-			GraphIterator<String, DefaultWeightedEdge> dfs = new DepthFirstIterator<>(kDuplicate, start);
+			V start = source;
+			GraphIterator<V, DefaultWeightedEdge> dfs = new DepthFirstIterator<>(kDuplicate, start);
 			
 			while(!start.equals(target)) {
 				
-				String next = dfs.next();
+				V next = dfs.next();
 				kDuplicate.removeEdge(kDuplicate.getEdge(start, next));
 				path.add(g.getEdge(start, next));
 				
