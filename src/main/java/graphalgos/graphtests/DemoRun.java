@@ -1,7 +1,5 @@
 package graphalgos.graphtests;
 
-import java.time.LocalTime;
-
 public abstract class DemoRun {
 
 	private long startTime;
