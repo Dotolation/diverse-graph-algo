@@ -10,8 +10,6 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.KShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.EppsteinKShortestPath;
 
-import graphalgos.DiverseMeasure;
-
 public class KBestAlgoRun extends DemoRun {
 	
 	public <V,E> KBestAlgoRun(Graph<V, E> g, V source, V target, int k, String message) {

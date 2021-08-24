@@ -1,4 +1,4 @@
-package graphalgos;
+package graphgenerators;
 
 import java.util.function.Supplier;
 
@@ -17,7 +17,7 @@ public class SimpleGrid {
 	public String source = "1|1";
 	public String target;
 	
-	protected Graph<String, DefaultWeightedEdge> graph;
+	public Graph<String, DefaultWeightedEdge> graph;
 	
 	public SimpleGrid(int x, int y) {
 		

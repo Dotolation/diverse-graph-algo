@@ -3,6 +3,7 @@ package graphalgos;
 import graphalgos.graphtests.DemoRun;
 import graphalgos.graphtests.DiverseAlgoRun;
 import graphalgos.graphtests.KBestAlgoRun;
+import graphgenerators.SimpleGrid;
 
 public class Simulation {
 

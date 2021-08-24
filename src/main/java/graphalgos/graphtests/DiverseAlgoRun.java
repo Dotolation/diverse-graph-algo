@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.jgrapht.Graph;
 
-import graphalgos.DiverseMeasure;
 import graphalgos.DiverseShortestPaths;
 
 public class DiverseAlgoRun extends DemoRun {
