@@ -17,9 +17,9 @@ public class Simulation {
 		int k = 5;
 		System.out.println("ha!");
 		//WikiVote Graph Test
-		Graph<Integer, DefaultWeightedEdge> vote = FileToGraph.read("src/slashdot.txt.gz", FileToGraph::readSNAP);
-		int source = 10515;
-		int target = 16959; 
+		Graph<Integer, DefaultWeightedEdge> vote = FileToGraph.read("src/SNAP/twitter_combined.txt.gz", FileToGraph::readSNAP);
+		int source = 34720571;
+		int target = 509323; 
 		String msg = String.format("Slashdot Graph: %d -> %d", source, target);
 		
 		simulate(vote, source, target, k, msg);

@@ -38,6 +38,7 @@ public class FileToGraph {
 			//int count = 0;
 			while (line != null) {
 				//count++;
+				//System.out.println(line);
 				graphReader.accept(g, line);
 				line = reader.readLine();
 

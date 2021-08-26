@@ -13,7 +13,7 @@ public class DiverseDIMACS extends DiverseShell {
 		int t = Integer.parseInt(args[2]);
 		int k = Integer.parseInt(args[3]);
 		
-		run(fileName, FileToGraph.read("src/" + fileName, FileToGraph::readDIMACS), s, t, k);
+		run(fileName, FileToGraph.read("src/DIMACS/" + fileName, FileToGraph::readDIMACS), s, t, k);
 
 	}
 

@@ -13,7 +13,7 @@ public class DiverseSNAP extends DiverseShell {
 		int t = Integer.parseInt(args[2]);
 		int k = Integer.parseInt(args[3]);
 		
-		run(fileName, FileToGraph.read("src/" + fileName, FileToGraph::readSNAP), s, t, k);
+		run(fileName, FileToGraph.read("src/SNAP/" + fileName, FileToGraph::readSNAP), s, t, k);
 
 	}
 
