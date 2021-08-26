@@ -25,7 +25,7 @@ import org.jgrapht.traverse.GraphIterator;
 import graphalgos.graphtests.DemoRun;
 
 
-public class DiverseShortestPaths <V,E> extends DemoRun {
+public class DiverseShortestPaths <V,E> {
 	
 	private Graph<V, E> g;
 	private V source;
@@ -43,28 +43,25 @@ public class DiverseShortestPaths <V,E> extends DemoRun {
 		
 		//initialization
 		kDuplicate = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
-		
-		startWatch();
-		//System.out.println("Preprocess");
+
+		//preprocess();
 		eppsteinPreprocess();
-		//stopWatch();
-		//System.out.println("minCostFlow");
+
 		minCostFlow();
-		//stopWatch();
+
 		
 	}
 		
-	//#1: 不要な辺を削除 + kDuplication 
+	//#1: 最短距離ではない辺を削除 + kDuplication 
 	private void preprocess(){
 		
-		/*initialization of shortest path class (Bellman-Ford)
+		/*initialization of shortest path class (Djikstra)
 		  https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html
 		  for other shortest path algorithms. 
 		*/
 		SingleSourcePaths<V, E> shortest = new DijkstraShortestPath<>(g).getPaths(source);
-		////System.out.println("Done with single source paths generation");
 		
-		//k-duplication. たが、各頂点までの最短経路ではない辺はDuplicationに含まれない。
+		
 		g.edgeSet().forEach(e -> {
 			V u = g.getEdgeSource(e);
 			V v = g.getEdgeTarget(e);
@@ -73,15 +70,18 @@ public class DiverseShortestPaths <V,E> extends DemoRun {
 			double uDist = shortest.getWeight(u);
 			double vDist = shortest.getWeight(v);
 			
+			//k-duplication.
 			if (uDist + weight <= vDist) addKCopies(e);
 			
 		});
 
 	}
 	
+	//#1-alternative: sからｔまでのShortest Pathにはない辺を「全部」削除。 そしてkDuplication 
+	//全部削除しますので、minCostFlow()のスピードが速くなります。
 	private void eppsteinPreprocess() {
 
-		Set<E> edgeSet = new HashSet<>();
+		Set<E> edgeSet = new HashSet<>(); //必要な辺（Shortest Pathに含まれた辺）
 		
 		Iterator<GraphPath<V, E>> epp = new EppsteinShortestPathIterator<>(g, source, target);
 		if(!epp.hasNext()) return ;
@@ -91,14 +91,19 @@ public class DiverseShortestPaths <V,E> extends DemoRun {
 		
 		while(epp.hasNext()) {
 			
-			if(count >= 10000) {
+			//Shortest Pathsが多すぎ（１万以上）場合は、既存のpreprocessingが早いです。
+			//その場合、このメソッドを止めて既存のものを実行します。
+			if(count >= 10000) { 
 				preprocess();
 				return ;
 			}
 			
 			GraphPath<V, E> next = epp.next();
-			if(next.getWeight() > w && count >= k) break;
 			
+			//このパスの長さがShortestではない時
+			if(next.getWeight() > w) break;
+			
+			//このパスの長さはShortestと同じ。
 			count++;
 			edgeSet.addAll(next.getEdgeList());
 			
@@ -109,19 +114,21 @@ public class DiverseShortestPaths <V,E> extends DemoRun {
 		
 	}
 	
-	//#1のK-Duplication
+	//#1のK-Duplicationです。G*を作ります。
 	private void addKCopies(E e) {
 		
+		//選択した辺の情報
 		V u = g.getEdgeSource(e);
 		V v = g.getEdgeTarget(e);
 		double w = g.getEdgeWeight(e);
 		
+		//Duplication
 		kDuplicate.addVertex(u);
 		kDuplicate.addVertex(v);
 		
 		for (int i = 1; i <= k; i++) {
 			DefaultWeightedEdge newEdge = kDuplicate.addEdge(u, v);
-			kDuplicate.setEdgeWeight(newEdge, w - 2*i + 1);
+			kDuplicate.setEdgeWeight(newEdge, w - 2*i + 1); //w'の公式
         }
 
 	}
@@ -129,11 +136,13 @@ public class DiverseShortestPaths <V,E> extends DemoRun {
 	//#2 minCostFlowでFlow Networkを求める
 	private void minCostFlow(){
 		
-		//System.out.println(kDuplicate.edgeSet().size());
-		
-		Function<DefaultWeightedEdge, Integer> minCapacity = edge -> 0;
+		//0 <= edge capacity <= 1
+		Function<DefaultWeightedEdge, Integer> minCapacity = edge -> 0; 
 		Function<DefaultWeightedEdge, Integer> maxCapacity = edge -> 1;
+		
+		//最大化のため, w'ではなく-w'そ使用
 		Function<DefaultWeightedEdge, Double> arcCost = edge -> -kDuplicate.getEdgeWeight(edge);
+		
 		Function<V, Integer> supplyDemand = vertex -> {
 			
 			if(vertex.equals(source)) {
@@ -154,8 +163,6 @@ public class DiverseShortestPaths <V,E> extends DemoRun {
 		MinimumCostFlowProblem<V, DefaultWeightedEdge> problem = new MinimumCostFlowProblemImpl<>(kDuplicate, supplyDemand, maxCapacity, minCapacity, arcCost);  
 		MinimumCostFlowAlgorithm<V, DefaultWeightedEdge> solver = new CapacityScalingMinimumCostFlow<>();
 		Map<DefaultWeightedEdge, Double> flowMap = solver.getMinimumCostFlow(problem).getFlowMap();
-		
-		//stopWatch();
 
 		flowMap.keySet().forEach(edge -> {
 			
@@ -170,6 +177,7 @@ public class DiverseShortestPaths <V,E> extends DemoRun {
 		
 	}
 	
+	//#3. Flow Networkからパス（実はパス内の辺の集合）たちを求める
 	@SuppressWarnings("unused")
 	public List<Set<E>> paths(){
 		
