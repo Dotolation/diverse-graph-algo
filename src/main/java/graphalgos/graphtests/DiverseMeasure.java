@@ -8,7 +8,7 @@ import org.jgrapht.Graph;
 
 public class DiverseMeasure {
 	
-	public static <V,E> void compute(List<Set<E>> es, Graph<V,E> g) {
+	public static <V,E> double compute(List<Set<E>> es, Graph<V,E> g) {
 		
 		double weight = 0.0;
 		
@@ -37,7 +37,9 @@ public class DiverseMeasure {
 			
 		}
 		
-		System.out.println(String.format("Diverse Measure: %f", weight));
+		//System.out.println(String.format("Diverse Measure: %f", weight));
+		
+		return weight; 
 		
 	}
 	

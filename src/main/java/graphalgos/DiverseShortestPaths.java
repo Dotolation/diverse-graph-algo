@@ -2,25 +2,30 @@ package graphalgos;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.flow.mincost.CapacityScalingMinimumCostFlow;
 import org.jgrapht.alg.flow.mincost.MinimumCostFlowProblem;
 import org.jgrapht.alg.flow.mincost.MinimumCostFlowProblem.MinimumCostFlowProblemImpl;
 import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.EppsteinShortestPathIterator;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 import org.jgrapht.traverse.DepthFirstIterator;
 import org.jgrapht.traverse.GraphIterator;
 
+import graphalgos.graphtests.DemoRun;
 
-public class DiverseShortestPaths <V,E> {
+
+public class DiverseShortestPaths <V,E> extends DemoRun {
 	
 	private Graph<V, E> g;
 	private V source;
@@ -29,14 +34,23 @@ public class DiverseShortestPaths <V,E> {
 	
 	private Graph<V, DefaultWeightedEdge> kDuplicate;
 	
+	
 	public DiverseShortestPaths(Graph<V, E> g, V source, V target, int k) {
 		this.g = g;
 		this.k = k; 
 		this.source = source;
 		this.target = target; 
 		
-		preprocess();
+		//initialization
+		kDuplicate = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
+		
+		startWatch();
+		//System.out.println("Preprocess");
+		eppsteinPreprocess();
+		//stopWatch();
+		//System.out.println("minCostFlow");
 		minCostFlow();
+		//stopWatch();
 		
 	}
 		
@@ -49,9 +63,6 @@ public class DiverseShortestPaths <V,E> {
 		*/
 		SingleSourcePaths<V, E> shortest = new DijkstraShortestPath<>(g).getPaths(source);
 		////System.out.println("Done with single source paths generation");
-
-		//initialization
-		kDuplicate = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
 		
 		//k-duplication. たが、各頂点までの最短経路ではない辺はDuplicationに含まれない。
 		g.edgeSet().forEach(e -> {
@@ -62,23 +73,63 @@ public class DiverseShortestPaths <V,E> {
 			double uDist = shortest.getWeight(u);
 			double vDist = shortest.getWeight(v);
 			
-			if (uDist + g.getEdgeWeight(e) <= vDist) {
-				
-				//k-duplication
-				for (int i = 1; i <= k; i++) {
-					kDuplicate.addVertex(u);
-					kDuplicate.addVertex(v);
-					DefaultWeightedEdge newEdge = kDuplicate.addEdge(u, v);
-					kDuplicate.setEdgeWeight(newEdge, weight - 2*i + 1);
-	            }
-			}
+			if (uDist + weight <= vDist) addKCopies(e);
 			
 		});
 
 	}
 	
+	private void eppsteinPreprocess() {
+
+		Set<E> edgeSet = new HashSet<>();
+		
+		Iterator<GraphPath<V, E>> epp = new EppsteinShortestPathIterator<>(g, source, target);
+		if(!epp.hasNext()) return ;
+
+		double w = epp.next().getWeight(); 
+		int count = 1;
+		
+		while(epp.hasNext()) {
+			
+			if(count >= 10000) {
+				preprocess();
+				return ;
+			}
+			
+			GraphPath<V, E> next = epp.next();
+			if(next.getWeight() > w && count >= k) break;
+			
+			count++;
+			edgeSet.addAll(next.getEdgeList());
+			
+			
+		}
+		edgeSet.forEach(e -> addKCopies(e));
+		
+		
+	}
+	
+	//#1のK-Duplication
+	private void addKCopies(E e) {
+		
+		V u = g.getEdgeSource(e);
+		V v = g.getEdgeTarget(e);
+		double w = g.getEdgeWeight(e);
+		
+		kDuplicate.addVertex(u);
+		kDuplicate.addVertex(v);
+		
+		for (int i = 1; i <= k; i++) {
+			DefaultWeightedEdge newEdge = kDuplicate.addEdge(u, v);
+			kDuplicate.setEdgeWeight(newEdge, w - 2*i + 1);
+        }
+
+	}
+	
 	//#2 minCostFlowでFlow Networkを求める
 	private void minCostFlow(){
+		
+		//System.out.println(kDuplicate.edgeSet().size());
 		
 		Function<DefaultWeightedEdge, Integer> minCapacity = edge -> 0;
 		Function<DefaultWeightedEdge, Integer> maxCapacity = edge -> 1;
@@ -103,6 +154,8 @@ public class DiverseShortestPaths <V,E> {
 		MinimumCostFlowProblem<V, DefaultWeightedEdge> problem = new MinimumCostFlowProblemImpl<>(kDuplicate, supplyDemand, maxCapacity, minCapacity, arcCost);  
 		MinimumCostFlowAlgorithm<V, DefaultWeightedEdge> solver = new CapacityScalingMinimumCostFlow<>();
 		Map<DefaultWeightedEdge, Double> flowMap = solver.getMinimumCostFlow(problem).getFlowMap();
+		
+		//stopWatch();
 
 		flowMap.keySet().forEach(edge -> {
 			

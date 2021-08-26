@@ -17,7 +17,7 @@ public class DiverseAlgoRun extends DemoRun {
 		 * 		
 		 */
 		
-		System.out.println(String.format("---Diverse Algo: %s---", message));
+		//System.out.println(String.format("---Diverse Algo: %s---", message));
 		
 		startWatch();
 		
@@ -25,7 +25,7 @@ public class DiverseAlgoRun extends DemoRun {
 		List<Set<E>> edgeSetLists = divAlgo.paths();
 		
 		stopWatch();
-		DiverseMeasure.compute(edgeSetLists, g);
+		calculateD(edgeSetLists, g);
 		
 	}
 	
