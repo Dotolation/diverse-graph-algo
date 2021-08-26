@@ -1,11 +1,8 @@
-package graphalgos;
+package graphalgos.graphtests;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import graphalgos.graphtests.DemoRun;
-import graphalgos.graphtests.DiverseAlgoRun;
-import graphalgos.graphtests.KBestAlgoRun;
 import graphgenerators.FileToGraph;
 import graphgenerators.SimpleGrid;
 
