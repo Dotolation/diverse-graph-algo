@@ -34,7 +34,7 @@ public abstract class AbstractShellTest {
 		
 		try {
 			
-			String path = "target/CSV/" + fileName;
+			String path = "target/" + fileName;
 			BufferedWriter out = new BufferedWriter(new FileWriter(path, true));
 			out.write(toPrint);
 			out.newLine();

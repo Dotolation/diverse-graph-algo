@@ -109,7 +109,7 @@ public class FileToGraph {
 
 	}
 
-	public static void notMain(String[] args) {
+	public static void notMain(String[] notArgs) {
 		  
 		  Random rand = new Random(2021l);
 		
