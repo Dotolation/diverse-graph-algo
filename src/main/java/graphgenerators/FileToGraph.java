@@ -91,19 +91,23 @@ public class FileToGraph {
 		
 		int u = sanitized[0];
 		int v = sanitized[1];
+		
+		int wRounding = (sanitized[2] % 100 < 50) ? 0 : 100;
+		int w = (sanitized[2] < 100) ? 100 : (sanitized[2] - sanitized[2] % 100) + wRounding;
+		
 
 		g.addVertex(u);
 		g.addVertex(v);
 		DefaultWeightedEdge edge = g.addEdge(u, v);
-		//System.out.println(String.format("%d, %d, %d", sanitized[0], sanitized[1], sanitized[2]));
+		System.out.println(String.format("%d, %d, %d", u, v, w));
 		
 		if(edge == null) {
 			
-			g.setEdgeWeight(g.getEdge(u, v), sanitized[2]);
+			g.setEdgeWeight(g.getEdge(u, v), w);
 			
 		} else {
 			
-			g.setEdgeWeight(edge, sanitized[2]);
+			g.setEdgeWeight(edge, w);
 		}
 		
 
