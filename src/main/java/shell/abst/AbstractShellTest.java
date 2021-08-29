@@ -8,6 +8,7 @@ import org.jgrapht.Graph;
 
 import graphalgos.graphtests.DemoRun;
 import graphalgos.graphtests.GraphOverview;
+import shell.inputhandler.InputHandler;
 
 public abstract class AbstractShellTest {
 	
