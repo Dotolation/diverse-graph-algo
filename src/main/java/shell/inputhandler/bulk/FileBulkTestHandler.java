@@ -1,18 +1,17 @@
-package shell.inputhandler;
+package shell.inputhandler.bulk;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import graphgenerators.FileToGraph;
 
-public class FileInputHandler extends InputHandler<Integer, DefaultWeightedEdge> {
+public class FileBulkTestHandler extends BulkTestHandler<Integer, DefaultWeightedEdge> {
 	
-	public FileInputHandler(String type, String args[]) {
+	public FileBulkTestHandler(String type, String args[]) {
 		
 		instanceName = args[0];
-		source = Integer.parseInt(args[1]);
-		target = Integer.parseInt(args[2]);
 		
-		k = Integer.parseInt(args[3]);
+		k = Integer.parseInt(args[1]);
+		tests = Integer.parseInt(args[2]);
 		
 		if(type.equals("DIMACS")){
 			
@@ -24,6 +23,5 @@ public class FileInputHandler extends InputHandler<Integer, DefaultWeightedEdge>
 		}
 		
 	}
-
 
 }

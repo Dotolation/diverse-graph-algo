@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.jgrapht.Graph;
-
 import graphalgos.graphtests.DemoRun;
 import graphalgos.graphtests.GraphOverview;
 import shell.inputhandler.InputHandler;
@@ -13,11 +11,21 @@ import shell.inputhandler.InputHandler;
 public abstract class AbstractShellTest {
 	
 	
-	public static <V,E> void abstractRun(String instance, String algoType, Graph<V,E> g, V s, V t, int k, DemoRun algo) {
+	public static <V,E> void abstractRun(String algoType,InputHandler<V, E> h,  DemoRun algo) {
 		
-		GraphOverview o = new GraphOverview(g, s, t);
+		GraphOverview o = h.overview;
 		
-		exportCSV("test_result.csv", instance, algoType, 
+		if(o == null) {
+			
+			o = h.setOverview();
+			
+		}
+		
+		V s = h.source;
+		V t = h.target;
+		Integer k = h.k;
+		
+		exportCSV("test_result.csv", h.instanceName, algoType, 
 				  s.toString(), t.toString(), Integer.toString(k),
 				  Integer.toString(o.vCount), Integer.toString(o.eCount),
 				  Integer.toString(o.vCountPaths), Integer.toString(o.eCountPaths),

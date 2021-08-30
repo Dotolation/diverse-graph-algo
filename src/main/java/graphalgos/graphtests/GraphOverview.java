@@ -11,6 +11,7 @@ import org.jgrapht.alg.shortestpath.EppsteinShortestPathIterator;
 public class GraphOverview {
 	
 	public int stPathCount;
+	public double avgPathLength;
 	
 	public int vCount;
 	public int eCount;
@@ -26,6 +27,7 @@ public class GraphOverview {
 		
 	}
 	
+
 	private <V,E> void overview(Graph<V, E> g, V source, V target) {
 
 		Set<E> edgeSet = new HashSet<>();
@@ -35,7 +37,9 @@ public class GraphOverview {
 		if(!epp.hasNext()) return ;
 
 		double w = epp.next().getWeight(); 
+		
 		int count = 1;
+		int pathLengthSum = 0;
 		
 		while(epp.hasNext()) {
 
@@ -43,11 +47,14 @@ public class GraphOverview {
 			if(next.getWeight() > w || count > 10000 ) break;
 			
 			count++;
+			pathLengthSum += next.getLength();
 			edgeSet.addAll(next.getEdgeList());
 			
 			
 		}
 		stPathCount = count; 
+		avgPathLength = (double)pathLengthSum / count;
+		
 		eCountPaths = edgeSet.size();
 		
 		edgeSet.forEach(e -> {

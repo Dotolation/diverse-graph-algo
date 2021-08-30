@@ -2,7 +2,6 @@ package shell;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import graphgenerators.FileToGraph;
 import shell.abst.KBestShell;
 import shell.inputhandler.FileInputHandler;
 import shell.inputhandler.InputHandler;
