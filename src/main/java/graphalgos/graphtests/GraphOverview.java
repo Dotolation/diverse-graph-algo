@@ -54,6 +54,7 @@ public class GraphOverview {
 		}
 		stPathCount = count; 
 		avgPathLength = (double)pathLengthSum / count;
+		//System.out.println(String.format("count: %d, avg.length: %f", stPathCount, avgPathLength));
 		
 		eCountPaths = edgeSet.size();
 		
