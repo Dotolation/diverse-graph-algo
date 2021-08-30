@@ -35,9 +35,9 @@ public class FileToGraph {
 			BufferedReader reader = new BufferedReader(decoder);
 
 			String line = reader.readLine();
-			//int count = 0;
-			while (line != null) {
-				//count++;
+			int count = 0;
+			while (line != null && count < 10000) {
+				count++;
 				//System.out.println(line);
 				graphReader.accept(g, line);
 				line = reader.readLine();
