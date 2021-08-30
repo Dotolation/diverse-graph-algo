@@ -23,7 +23,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 		
 		try {
 			GraphOverview o = this.setOverview();
-			goodPath = (o.stPathCount >= 20 && o.avgPathLength >= 3.0); 
+			goodPath = (o.stPathCount >= 30 && o.avgPathLength >= 3.0); 
 			
 		} catch (Exception e) {
 			
@@ -41,7 +41,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 		
 		Random rand = new Random();
 		int length = g.vertexSet().size();
-		List<V> vList = g.vertexSet().stream().filter(v -> rand.nextInt(length) < 120).collect(Collectors.toList());
+		List<V> vList = g.vertexSet().stream().filter(v -> rand.nextInt(length) < 200).collect(Collectors.toList());
 		
 		vQueue = new LinkedList<>();
 		for(V s : vList) {
@@ -60,7 +60,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 		
 		Collections.shuffle((List<List<V>>) vQueue);
 		
-		System.out.println("Created a sample batch of source/target pairs. " + vQueue.size());
+		//System.out.println("Created a sample batch of source/target pairs. " + vQueue.size());
 
 		
 	}
@@ -76,7 +76,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	
 	public boolean doneTraversing() {
 		
-		if(vQueue.size() % 1000 == 0) System.out.println(String.format("Queue size: %d", vQueue.size()));
+		//if(vQueue.size() % 1000 == 0) System.out.println(String.format("Queue size: %d", vQueue.size()));
 		
 		return vQueue.isEmpty();
 	}

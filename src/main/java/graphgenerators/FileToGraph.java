@@ -36,7 +36,7 @@ public class FileToGraph {
 
 			String line = reader.readLine();
 			int count = 0;
-			while (line != null && count < 10000) {
+			while (line != null && count < 50000) {
 				count++;
 				//System.out.println(line);
 				graphReader.accept(g, line);
@@ -99,7 +99,7 @@ public class FileToGraph {
 		g.addVertex(u);
 		g.addVertex(v);
 		DefaultWeightedEdge edge = g.addEdge(u, v);
-		System.out.println(String.format("%d, %d, %d", u, v, w));
+		//System.out.println(String.format("%d, %d, %d", u, v, w));
 		
 		if(edge == null) {
 			

@@ -10,7 +10,7 @@ public abstract class BulkShellTest extends AbstractShellTest {
 		
 		h.buildBatch();
 		
-		while (count < h.tests || !(h.doneTraversing())) {
+		while (count < h.tests && !(h.doneTraversing())) {
 			h.stPick();
 			
 			if(!h.isUsable()) { 
