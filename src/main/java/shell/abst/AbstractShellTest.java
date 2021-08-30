@@ -29,7 +29,7 @@ public abstract class AbstractShellTest {
 				  s.toString(), t.toString(), Integer.toString(k),
 				  Integer.toString(o.vCount), Integer.toString(o.eCount),
 				  Integer.toString(o.vCountPaths), Integer.toString(o.eCountPaths),
-				  Integer.toString(o.stPathCount),
+				  Integer.toString(o.stPathCount), Double.toString(o.avgPathLength),
 				  Long.toString(algo.elapsed),Double.toString(algo.diversityMeasure));
 		
 		
