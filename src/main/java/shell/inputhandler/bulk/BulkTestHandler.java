@@ -39,9 +39,9 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	
 	public void buildBatch() {
 		
-		Random rand = new Random();
+		Random rand = new Random(2021);
 		int length = g.vertexSet().size();
-		List<V> vList = g.vertexSet().stream().filter(v -> rand.nextInt(length) < 200).collect(Collectors.toList());
+		List<V> vList = g.vertexSet().stream().filter(v -> rand.nextInt(length) < 300).collect(Collectors.toList());
 		
 		vQueue = new LinkedList<>();
 		for(V s : vList) {
@@ -58,7 +58,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 			
 		}
 		
-		Collections.shuffle((List<List<V>>) vQueue);
+		Collections.shuffle((List<List<V>>) vQueue, rand);
 		
 		//System.out.println("Created a sample batch of source/target pairs. " + vQueue.size());
 
