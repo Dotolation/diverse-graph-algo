@@ -1,2 +1,6 @@
 /target/classes/
 /target/test-classes/
+/target/generated-sources/
+/target/maven-archiver/
+/target/maven-status/
+/target/diverse-graph-algo-0.0.1-SNAPSHOT.jar
