@@ -36,7 +36,7 @@ public class FileToGraph {
 
 			String line = reader.readLine();
 			int count = 0;
-			while (line != null && count < 50000) {
+			while (line != null) {
 				count++;
 				//System.out.println(line);
 				graphReader.accept(g, line);
