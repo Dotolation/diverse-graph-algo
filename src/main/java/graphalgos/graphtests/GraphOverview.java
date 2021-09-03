@@ -1,12 +1,20 @@
 package graphalgos.graphtests;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.EppsteinShortestPathIterator;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+
+import graphalgos.Preprocess;
 
 public class GraphOverview {
 	
@@ -23,9 +31,11 @@ public class GraphOverview {
 		
 		vCount = g.vertexSet().size();
 		eCount = g.edgeSet().size();
-		overview(g, s, t);
+		overview(Preprocess.clean(g,s,t), s, t);
 		
 	}
+	
+	
 	
 
 	private <V,E> void overview(Graph<V, E> g, V source, V target) {

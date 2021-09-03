@@ -10,16 +10,21 @@ import java.util.stream.Collectors;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.EppsteinShortestPathIterator;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
+import graphalgos.Preprocess;
 
 public class KBestAlgoRun extends DemoRun {
 	
 	public <V,E> KBestAlgoRun(Graph<V, E> g, V source, V target, int k, String message) {
 	
-		List<GraphPath<V,E>> kPaths = new ArrayList<>();
+		List<GraphPath<V,DefaultWeightedEdge>> kPaths = new ArrayList<>();
 		
 		startWatch();
+		
+		Graph<V,DefaultWeightedEdge> cleaned = Preprocess.clean(g, source, target);
 
-		Iterator<GraphPath<V, E>> epp = new EppsteinShortestPathIterator<>(g, source, target);
+		Iterator<GraphPath<V, DefaultWeightedEdge>> epp = new EppsteinShortestPathIterator<>(cleaned, source, target);
 		
 		int counter = 0;
 		while(epp.hasNext() && counter < k) {
@@ -29,10 +34,10 @@ public class KBestAlgoRun extends DemoRun {
 		
 		stopWatch();
 		
-		List<Set<E>> edgeSets = kPaths.stream().map(path -> new HashSet<>(path.getEdgeList())).collect(Collectors.toList());
+		List<Set<DefaultWeightedEdge>> edgeSets = kPaths.stream().map(path -> new HashSet<>(path.getEdgeList())).collect(Collectors.toList());
 		//edgeSets.forEach(edgeSet -> System.out.println(edgeSet));
 
-		calculateD(edgeSets, g);
+		calculateD(edgeSets, cleaned);
 
 	}
 

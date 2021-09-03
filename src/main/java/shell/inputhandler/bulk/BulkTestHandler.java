@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import graphalgos.graphtests.GraphOverview;
 import shell.inputhandler.InputHandler;
@@ -20,6 +23,14 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 
 	
 	public boolean isUsable() {
+		
+		ShortestPathAlgorithm<V, E> fw = new DijkstraShortestPath<>(g);
+		GraphPath<V,E> path = fw.getPath(source, target);
+		
+		if((path==null) || path.getLength() < 4 ) { 
+			//System.out.println("skip");
+			return false;
+		}
 		
 		try {
 			GraphOverview o = this.setOverview();
@@ -38,16 +49,16 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	}
 	
 	public void buildBatch() {
-		
-		Random rand = new Random(2021);
-		int length = g.vertexSet().size();
-		List<V> vList = g.vertexSet().stream().filter(v -> rand.nextInt(length) < 300).collect(Collectors.toList());
+
+		List<V> vList = g.vertexSet().stream().filter(v -> g.degreeOf(v) <= 20 && g.degreeOf(v) >=3 )
+				        .collect(Collectors.toList());
 		
 		vQueue = new LinkedList<>();
 		for(V s : vList) {
 			for(V t : vList) {
 				
 				if(s.equals(t)) continue; 
+				if(vQueue.size() >= 500000) break;
 				
 				List<V> l = new LinkedList<>();
 				l.add(s);
@@ -57,8 +68,8 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 			}
 			
 		}
-		
-		Collections.shuffle((List<List<V>>) vQueue, rand);
+
+		Collections.shuffle((List<List<V>>) vQueue);
 		
 		//System.out.println("Created a sample batch of source/target pairs. " + vQueue.size());
 

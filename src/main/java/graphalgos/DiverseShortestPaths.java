@@ -32,6 +32,7 @@ public class DiverseShortestPaths <V,E> {
 	private V target;
 	private int k;
 	
+	public Graph<V, DefaultWeightedEdge> gPrime;
 	private Graph<V, DefaultWeightedEdge> kDuplicate;
 	
 	
@@ -44,8 +45,9 @@ public class DiverseShortestPaths <V,E> {
 		//initialization
 		kDuplicate = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
 
-		preprocess();
-		//eppsteinPreprocess();
+		//preprocess();
+		gPrime = Preprocess.clean(g, source, target);
+		eppsteinPreprocess(gPrime);
 
 		minCostFlow();
 
@@ -53,37 +55,24 @@ public class DiverseShortestPaths <V,E> {
 	}
 		
 	//#1: 最短距離ではない辺を削除 + kDuplication 
-	private void preprocess(){
+	private void skipThis(Graph<V,DefaultWeightedEdge> gr){
 		
 		/*initialization of shortest path class (Djikstra)
 		  https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html
 		  for other shortest path algorithms. 
 		*/
-		SingleSourcePaths<V, E> shortest = new DijkstraShortestPath<>(g).getPaths(source);
 		
-		
-		g.edgeSet().forEach(e -> {
-			V u = g.getEdgeSource(e);
-			V v = g.getEdgeTarget(e);
-			double weight = g.getEdgeWeight(e);
-			
-			double uDist = shortest.getWeight(u);
-			double vDist = shortest.getWeight(v);
-			
-			//k-duplication.
-			if (uDist + weight <= vDist) addKCopies(e);
-			
-		});
+		gr.edgeSet().forEach(e -> addKCopies(gr, e));
 
 	}
 	
 	//#1-alternative: sからｔまでのShortest Pathにはない辺を「全部」削除。 そしてkDuplication 
 	//全部削除しますので、minCostFlow()のスピードが速くなります。
-	private void eppsteinPreprocess() {
+	private void eppsteinPreprocess(Graph<V,DefaultWeightedEdge> gr) {
 
-		Set<E> edgeSet = new HashSet<>(); //必要な辺（Shortest Pathに含まれた辺）
+		Set<DefaultWeightedEdge> edgeSet = new HashSet<>(); //必要な辺（Shortest Pathに含まれた辺）
 		
-		Iterator<GraphPath<V, E>> epp = new EppsteinShortestPathIterator<>(g, source, target);
+		Iterator<GraphPath<V, DefaultWeightedEdge>> epp = new EppsteinShortestPathIterator<>(gr, source, target);
 		if(!epp.hasNext()) return ;
 
 		double w = epp.next().getWeight(); 
@@ -94,11 +83,11 @@ public class DiverseShortestPaths <V,E> {
 			//Shortest Pathsが多すぎ（１万以上）場合は、既存のpreprocessingが早いです。
 			//その場合、このメソッドを止めて既存のものを実行します。
 			if(count >= 10000) { 
-				preprocess();
+				skipThis(gr);
 				return ;
 			}
 			
-			GraphPath<V, E> next = epp.next();
+			GraphPath<V, DefaultWeightedEdge> next = epp.next();
 			
 			//このパスの長さがShortestではない時
 			if(next.getWeight() > w) break;
@@ -109,18 +98,18 @@ public class DiverseShortestPaths <V,E> {
 			
 			
 		}
-		edgeSet.forEach(e -> addKCopies(e));
+		edgeSet.forEach(e -> addKCopies(gr, e));
 		
 		
 	}
 	
 	//#1のK-Duplicationです。G*を作ります。
-	private void addKCopies(E e) {
+	private void addKCopies(Graph<V, DefaultWeightedEdge> gr, DefaultWeightedEdge e) {
 		
 		//選択した辺の情報
-		V u = g.getEdgeSource(e);
-		V v = g.getEdgeTarget(e);
-		double w = g.getEdgeWeight(e);
+		V u = gr.getEdgeSource(e);
+		V v = gr.getEdgeTarget(e);
+		double w = gr.getEdgeWeight(e);
 		
 		//Duplication
 		kDuplicate.addVertex(u);
@@ -179,12 +168,12 @@ public class DiverseShortestPaths <V,E> {
 	
 	//#3. Flow Networkからパス（実はパス内の辺の集合）たちを求める
 	@SuppressWarnings("unused")
-	public List<Set<E>> paths(){
+	public List<Set<DefaultWeightedEdge>> paths(){
 		
-		List<Set<E>> pathList = new ArrayList<>();
+		List<Set<DefaultWeightedEdge>> pathList = new ArrayList<>();
 		for (DefaultWeightedEdge e : kDuplicate.outgoingEdgesOf(source)) pathList.add(new HashSet<>());
 		
-		for(Set<E> path : pathList) {
+		for(Set<DefaultWeightedEdge> path : pathList) {
 			
 			V start = source;
 			GraphIterator<V, DefaultWeightedEdge> dfs = new DepthFirstIterator<>(kDuplicate, start);
@@ -193,7 +182,7 @@ public class DiverseShortestPaths <V,E> {
 				
 				V next = dfs.next();
 				kDuplicate.removeEdge(kDuplicate.getEdge(start, next));
-				path.add(g.getEdge(start, next));
+				path.add(gPrime.getEdge(start, next));
 				
 				start = next;
 				

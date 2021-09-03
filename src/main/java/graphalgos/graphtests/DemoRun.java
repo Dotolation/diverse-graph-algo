@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 public abstract class DemoRun {
 
@@ -34,7 +35,7 @@ public abstract class DemoRun {
 		
 	}
 	
-	protected <V, E> void calculateD(List<Set<E>> edgeSets, Graph<V,E> g) {
+	protected <V> void calculateD(List<Set<DefaultWeightedEdge>> edgeSets, Graph<V,DefaultWeightedEdge> g) {
 		
 		diversityMeasure = DiverseMeasure.compute(edgeSets, g);
 		

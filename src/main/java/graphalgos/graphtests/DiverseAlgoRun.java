@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import graphalgos.DiverseShortestPaths;
 
@@ -22,10 +23,10 @@ public class DiverseAlgoRun extends DemoRun {
 		startWatch();
 		
 		DiverseShortestPaths<V, E> divAlgo = new DiverseShortestPaths<>(g, source, target, k);
-		List<Set<E>> edgeSetLists = divAlgo.paths();
+		List<Set<DefaultWeightedEdge>> edgeSetLists = divAlgo.paths();
 		
 		stopWatch();
-		calculateD(edgeSetLists, g);
+		calculateD(edgeSetLists, divAlgo.gPrime);
 		
 	}
 	

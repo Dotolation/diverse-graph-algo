@@ -5,29 +5,30 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 public class DiverseMeasure {
 	
-	public static <V,E> double compute(List<Set<E>> es, Graph<V,E> g) {
+	public static <V> double compute(List<Set<DefaultWeightedEdge>> es, Graph<V,DefaultWeightedEdge> g) {
 		
 		double weight = 0.0;
 		
 		for(int i=0; i < es.size(); i++) {
 			
-			Set<E> a = es.get(i);
+			Set<DefaultWeightedEdge> a = es.get(i);
 			
 			for(int j=i; j < es.size(); j++) {
 				
 				if (i==j) continue;
 
-				Set<E> b = es.get(j);
+				Set<DefaultWeightedEdge> b = es.get(j);
 				
 				//Compute the intersection first 
-				Set<E> overlap = new HashSet<>(a);
+				Set<DefaultWeightedEdge> overlap = new HashSet<>(a);
 		        overlap.retainAll(b);
 				
 		        //remove the intersection to compute the symmetric difference 
-		        Set<E> symDiff = new HashSet<>(a);
+		        Set<DefaultWeightedEdge> symDiff = new HashSet<>(a);
 				symDiff.addAll(b);
 				symDiff.removeAll(overlap);
 				
@@ -43,11 +44,11 @@ public class DiverseMeasure {
 		
 	}
 	
-	private static <V,E> double weightSum(Set<E> e, Graph<V,E> g) {
+	private static <V> double weightSum(Set<DefaultWeightedEdge> e, Graph<V,DefaultWeightedEdge> g) {
 		
 		double sum = 0.0d;
 		
-		for(E edge : e) {
+		for(DefaultWeightedEdge edge : e) {
 			sum += g.getEdgeWeight(edge);
 		}
 		
