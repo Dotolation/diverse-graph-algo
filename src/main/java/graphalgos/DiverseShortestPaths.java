@@ -44,8 +44,8 @@ public class DiverseShortestPaths <V,E> {
 		//initialization
 		kDuplicate = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
 
-		//preprocess();
-		eppsteinPreprocess();
+		preprocess();
+		//eppsteinPreprocess();
 
 		minCostFlow();
 
