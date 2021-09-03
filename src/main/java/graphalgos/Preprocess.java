@@ -13,7 +13,7 @@ public class Preprocess {
 	
 	public static <V,E> Graph<V,DefaultWeightedEdge> clean(Graph<V, E> g, V s, V t){
 		
-		System.out.println(String.format("(Before) vertices: %d edges: %d", g.vertexSet().size(), g.edgeSet().size()));
+		//System.out.println(String.format("(Before) vertices: %d edges: %d", g.vertexSet().size(), g.edgeSet().size()));
 		
 		Graph<V, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 		
@@ -43,7 +43,7 @@ public class Preprocess {
         
         Graph<V, DefaultWeightedEdge> gPrime = vertexClean(graph, t);
 		
-		System.out.println(String.format("(After) verticces: %d edges: %d", gPrime.vertexSet().size(), gPrime.edgeSet().size()));
+		//System.out.println(String.format("(After) verticces: %d edges: %d", gPrime.vertexSet().size(), gPrime.edgeSet().size()));
 		
 		return gPrime; 
 		
