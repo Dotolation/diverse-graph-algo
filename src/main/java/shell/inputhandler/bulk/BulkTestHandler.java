@@ -24,17 +24,9 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	
 	public boolean isUsable() {
 		
-		ShortestPathAlgorithm<V, E> fw = new DijkstraShortestPath<>(g);
-		GraphPath<V,E> path = fw.getPath(source, target);
-
-		if((path==null) || path.getLength() < 4 ) { 
-			//System.out.println("skip");
-			return false;
-		}
-		
 		try {
 			GraphOverview o = this.setOverview();
-			goodPath = (o.stPathCount >= 30 && o.avgPathLength >= 3.0); 
+			goodPath = (o.stPathCount >= k * 3 && o.avgPathLength >= 3.0); 
 			
 		} catch (Exception e) {
 			
@@ -52,11 +44,9 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 		
 		Random rand = new Random(2021);
 
-		List<V> filtered = g.vertexSet().stream().filter(v -> g.degreeOf(v) <= 30 && g.degreeOf(v) >=2 )
-				        .collect(Collectors.toList());
-		int len = filtered.size();
+		List<V> vList = new LinkedList<>(g.vertexSet());
 		
-		List<V> sample = filtered.stream().filter(v -> rand.nextInt(len) < 500).collect(Collectors.toList());
+		List<V> sample = vList.stream().filter(v -> rand.nextInt(vList.size()) < 500).collect(Collectors.toList());
 		
 		vQueue = new LinkedList<>();
 		for(V s : sample) {
