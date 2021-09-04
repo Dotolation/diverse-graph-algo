@@ -24,9 +24,14 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	
 	public boolean isUsable() {
 		
+		ShortestPathAlgorithm<V, E> fw = new DijkstraShortestPath<>(g);
+		GraphPath<V,E> path = fw.getPath(source, target);
+
+		if(path==null) return false;
+		
 		try {
 			GraphOverview o = this.setOverview();
-			goodPath = (o.stPathCount >= k * 3 && o.avgPathLength >= 3.0); 
+			goodPath = (o.stPathCount >= 3 * k && o.avgPathLength >= 3.0); 
 			
 		} catch (Exception e) {
 			
