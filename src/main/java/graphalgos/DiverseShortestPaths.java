@@ -47,7 +47,8 @@ public class DiverseShortestPaths <V,E> {
 
 		//preprocess();
 		gPrime = Preprocess.clean(g, source, target);
-		eppsteinPreprocess(gPrime);
+		kDuplication(gPrime);
+		//eppsteinPreprocess(gPrime);
 
 		minCostFlow();
 
@@ -55,7 +56,7 @@ public class DiverseShortestPaths <V,E> {
 	}
 		
 	//#1: 最短距離ではない辺を削除 + kDuplication 
-	private void skipThis(Graph<V,DefaultWeightedEdge> gr){
+	private void kDuplication (Graph<V,DefaultWeightedEdge> gr){
 		
 		/*initialization of shortest path class (Djikstra)
 		  https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html
@@ -83,7 +84,7 @@ public class DiverseShortestPaths <V,E> {
 			//Shortest Pathsが多すぎ（１万以上）場合は、既存のpreprocessingが早いです。
 			//その場合、このメソッドを止めて既存のものを実行します。
 			if(count >= 10000) { 
-				skipThis(gr);
+				kDuplication(gr);
 				return ;
 			}
 			

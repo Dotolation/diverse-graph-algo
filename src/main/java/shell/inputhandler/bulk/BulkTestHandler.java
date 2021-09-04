@@ -26,7 +26,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 		
 		ShortestPathAlgorithm<V, E> fw = new DijkstraShortestPath<>(g);
 		GraphPath<V,E> path = fw.getPath(source, target);
-		
+
 		if((path==null) || path.getLength() < 4 ) { 
 			//System.out.println("skip");
 			return false;
@@ -49,17 +49,20 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	}
 	
 	public void buildBatch() {
+		
+		Random rand = new Random(2021);
 
-		List<V> vList = g.vertexSet().stream().filter(v -> g.degreeOf(v) <= 20 && g.degreeOf(v) >=3 )
+		List<V> filtered = g.vertexSet().stream().filter(v -> g.degreeOf(v) <= 30 && g.degreeOf(v) >=2 )
 				        .collect(Collectors.toList());
+		int len = filtered.size();
+		
+		List<V> sample = filtered.stream().filter(v -> rand.nextInt(len) < 500).collect(Collectors.toList());
 		
 		vQueue = new LinkedList<>();
-		for(V s : vList) {
-			for(V t : vList) {
+		for(V s : sample) {
+			for(V t : sample) {
 				
 				if(s.equals(t)) continue; 
-				if(vQueue.size() >= 500000) break;
-				
 				List<V> l = new LinkedList<>();
 				l.add(s);
 				l.add(t);
@@ -69,7 +72,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 			
 		}
 
-		Collections.shuffle((List<List<V>>) vQueue);
+		Collections.shuffle((List<List<V>>) vQueue, rand);
 		
 		//System.out.println("Created a sample batch of source/target pairs. " + vQueue.size());
 

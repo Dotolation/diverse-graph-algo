@@ -76,6 +76,7 @@ public class GraphOverview {
 
 		vCountPaths = vertexSet.size();
 		
+		//System.out.println(String.format("(Eppstein) vertices: %d, edges: %d", vCountPaths, eCountPaths));
 	}
 
 }
