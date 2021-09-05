@@ -1,3 +1,4 @@
+Instance_Name,Algo_Type,Source,Target,k,#V,#E,#V_stPaths,#E_stPaths,#stPaths,Miliseconds,Diversity
 wikivote.txt.gz,Diverse,7235,2999,10,7115,103689,44,87,46,3.9130434782608696,80,266.0
 wikivote.txt.gz,KBest,7235,2999,10,7115,103689,44,87,46,3.9130434782608696,29,246.0
 wikivote.txt.gz,Diverse,3748,10,10,7115,103689,25,50,34,3.8823529411764706,21,314.0
