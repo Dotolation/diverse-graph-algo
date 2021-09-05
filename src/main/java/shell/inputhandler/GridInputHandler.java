@@ -19,5 +19,20 @@ public class GridInputHandler extends InputHandler<String, DefaultWeightedEdge> 
 		target = grid.target;
 
 	}
+	
+	public GridInputHandler(int dim, int k) {
+		
+		int x = dim;
+		int y = dim;
+		
+		this.k = k;
+		
+		instanceName = String.format("Grid%d_%d", x, y);
+		SimpleGrid grid = new SimpleGrid(x, y);
+		g = grid.graph;
+		source = grid.source;
+		target = grid.target;
+			
+	}
 
 }
