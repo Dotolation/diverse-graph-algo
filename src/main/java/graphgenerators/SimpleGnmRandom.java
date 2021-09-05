@@ -1,6 +1,5 @@
 package graphgenerators;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 import org.jgrapht.Graph;
@@ -28,9 +27,8 @@ public class SimpleGnmRandom {
         };
 
         graph = new SimpleDirectedWeightedGraph<>(defaultvSupplier, SupplierUtil.createDefaultWeightedEdgeSupplier());
-		GraphGenerator<Integer, DefaultWeightedEdge, Integer> gridGenerator = new GnmRandomGraphGenerator<>(n, m, seed);
-		gridGenerator.generateGraph(graph);
-		
+		GraphGenerator<Integer, DefaultWeightedEdge, Integer> gnmGenerator = new GnmRandomGraphGenerator<>(n, m, seed);
+		gnmGenerator.generateGraph(graph);
 		
 	}
 
