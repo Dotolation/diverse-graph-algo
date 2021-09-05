@@ -1,6 +1,7 @@
 package shell.abst;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -44,7 +45,15 @@ public abstract class AbstractShellTest {
 		try {
 			
 			String path = "target/" + fileName;
+			boolean exists = new File(path).exists();
+			
 			BufferedWriter out = new BufferedWriter(new FileWriter(path, true));
+			if(!exists) out.write("Instance_Name,Algo_Type,Source,Target,k,"
+					+ "#V,#E,#V_stPaths,#E_stPaths,"
+					+ "#stPaths,Avg_stPath_Length,"
+					+ "Milliseconds,Diversity");
+			
+			out.newLine();
 			out.write(toPrint);
 			out.newLine();
 			out.close();

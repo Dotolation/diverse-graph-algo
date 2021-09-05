@@ -1,22 +1,16 @@
 package graphalgos.graphtests;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.EppsteinShortestPathIterator;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import graphalgos.Preprocess;
 
-public class GraphOverview {
+public class GraphOverview extends DemoRun {
 	
 	public int stPathCount;
 	public double avgPathLength;
@@ -31,8 +25,10 @@ public class GraphOverview {
 		
 		vCount = g.vertexSet().size();
 		eCount = g.edgeSet().size();
+		startWatch();
 		overview(Preprocess.clean(g,s,t), s, t);
-		
+		stopWatch();
+		//System.out.println(this.elapsed + "milisecond for preprocessing.");
 	}
 	
 	
@@ -44,12 +40,12 @@ public class GraphOverview {
 		Set<V> vertexSet = new HashSet<>();
 		
 		Iterator<GraphPath<V, E>> epp = new EppsteinShortestPathIterator<>(g, source, target);
-		if(!epp.hasNext()) return ;
-
-		double w = epp.next().getWeight(); 
-		
+        GraphPath<V,E> path = epp.next();
+        edgeSet.addAll(path.getEdgeList());
+        
+		double w = path.getWeight(); 
 		int count = 1;
-		int pathLengthSum = 0;
+		int pathLengthSum = path.getLength();
 		
 		while(epp.hasNext()) {
 

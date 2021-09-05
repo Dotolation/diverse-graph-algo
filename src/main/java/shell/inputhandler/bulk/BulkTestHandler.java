@@ -27,7 +27,14 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 		ShortestPathAlgorithm<V, E> fw = new DijkstraShortestPath<>(g);
 		GraphPath<V,E> path = fw.getPath(source, target);
 
-		if(path==null) return false;
+		if(path==null) { 
+			//System.out.println("no such path exists");
+			return false;
+			
+		} else {
+			System.out.println();
+			System.out.println(path);
+		}
 		
 		try {
 			GraphOverview o = this.setOverview();
