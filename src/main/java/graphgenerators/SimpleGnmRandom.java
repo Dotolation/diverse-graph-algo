@@ -40,7 +40,7 @@ public class SimpleGnmRandom {
         	
         }
         
-        System.out.println(String.format("Vertices: %d, Edges: %d", graph.vertexSet().size(), graph.edgeSet().size()));
+        //System.out.println(String.format("Vertices: %d, Edges: %d", graph.vertexSet().size(), graph.edgeSet().size()));
 		
 	}
 
