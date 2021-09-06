@@ -48,12 +48,15 @@ public abstract class AbstractShellTest {
 			boolean exists = new File(path).exists();
 			
 			BufferedWriter out = new BufferedWriter(new FileWriter(path, true));
-			if(!exists) out.write("Instance_Name,Algo_Type,Source,Target,k,"
+			if(!exists) {
+				out.write("Instance_Name,Algo_Type,Source,Target,k,"
 					+ "#V,#E,#V_stPaths,#E_stPaths,"
 					+ "#stPaths,Avg_stPath_Length,"
 					+ "Milliseconds,Diversity");
-			
-			out.newLine();
+				
+				out.newLine();
+			}
+
 			out.write(toPrint);
 			out.newLine();
 			out.close();

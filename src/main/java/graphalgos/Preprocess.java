@@ -17,9 +17,9 @@ public class Preprocess {
 		//System.out.println(String.format("(Before) vertices: %d edges: %d", g.vertexSet().size(), g.edgeSet().size()));
 		
 		Graph<V, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-		
-        SingleSourcePaths<V, E> shortest = new DijkstraShortestPath<>(g).getPaths(s);
-		
+
+		SingleSourcePaths<V, E> shortest = new DijkstraShortestPath<>(g).getPaths(s);
+
         g.edgeSet().forEach(e -> {
         	
 			V u = g.getEdgeSource(e);
@@ -41,7 +41,7 @@ public class Preprocess {
 			
 		});
 
-        Graph<V, DefaultWeightedEdge> firstPass = vertexClean(graph, t);
+        Graph<V, DefaultWeightedEdge> firstPass = vertexClean(graph, s, t);
         //System.out.println(String.format("(firstPass) verticces: %d edges: %d", firstPass.vertexSet().size(), firstPass.edgeSet().size()));
         
         
@@ -82,7 +82,7 @@ public class Preprocess {
 		
 	}
 	
-	private static <V> Graph<V, DefaultWeightedEdge> vertexClean(Graph<V,DefaultWeightedEdge> g, V t) {
+	private static <V> Graph<V, DefaultWeightedEdge> vertexClean(Graph<V,DefaultWeightedEdge> g, V s, V t) {
 		
 		boolean breakLoop = false; 
 		
@@ -93,7 +93,7 @@ public class Preprocess {
 			
 			for (V v: vList) {
 				
-				if(g.outDegreeOf(v) < 1 && !v.equals(t)) { 
+				if(g.outDegreeOf(v) < 1 && !v.equals(t) && !v.equals(s)) { 
 					g.removeVertex(v);
 					breakLoop = false;
 				}

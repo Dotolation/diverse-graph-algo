@@ -40,6 +40,7 @@ public class GraphOverview extends DemoRun {
 		Set<V> vertexSet = new HashSet<>();
 		
 		Iterator<GraphPath<V, E>> epp = new EppsteinShortestPathIterator<>(g, source, target);
+		
         GraphPath<V,E> path = epp.next();
         edgeSet.addAll(path.getEdgeList());
         

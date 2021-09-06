@@ -1,11 +1,9 @@
 package shell.inputhandler.bulk;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -19,7 +17,8 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	public boolean goodPath;
 	public int tests;
 	
-	private Queue<List<V>> vQueue;
+	private List<V> vList;
+	private static Random rand = new Random(2021);
 
 	
 	public boolean isUsable() {
@@ -32,8 +31,8 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 			return false;
 			
 		} else {
-			System.out.println();
-			System.out.println(path);
+			//System.out.println();
+			//System.out.println(path);
 		}
 		
 		try {
@@ -53,47 +52,32 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	}
 	
 	public void buildBatch() {
-		
-		Random rand = new Random(2021);
-
-		List<V> vList = new LinkedList<>(g.vertexSet());
-		
-		List<V> sample = vList.stream().filter(v -> rand.nextInt(vList.size()) < 500).collect(Collectors.toList());
-		
-		vQueue = new LinkedList<>();
-		for(V s : sample) {
-			for(V t : sample) {
-				
-				if(s.equals(t)) continue; 
-				List<V> l = new LinkedList<>();
-				l.add(s);
-				l.add(t);
-				vQueue.add(l);
-				
-			}
-			
-		}
-
-		Collections.shuffle((List<List<V>>) vQueue, rand);
-		
-		//System.out.println("Created a sample batch of source/target pairs. " + vQueue.size());
-
+		this.vList = new ArrayList<>(g.vertexSet());
 		
 	}
 	
 	public void stPick() {
 		
-		List<V> pair = vQueue.poll();
+		int l = vList.size();
 		
-		source = pair.get(0);
-		target = pair.get(1);
+		source = vList.get(rand.nextInt(l));
+		target = vList.get(rand.nextInt(l));
+		
+		while(source == target) {
+			
+			target = vList.get(rand.nextInt(l));
+			
+		}
 
 	}
 	
-	public boolean doneTraversing() {
+	public List<V> stPair() {
 		
-		//if(vQueue.size() % 1000 == 0) System.out.println(String.format("Queue size: %d", vQueue.size()));
+		List<V> p = new LinkedList<>();
+		p.add(source);
+		p.add(target);
 		
-		return vQueue.isEmpty();
+		return p;
 	}
+	
 }
