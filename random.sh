@@ -13,10 +13,10 @@ java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 50000 50000
 java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 200000 2000000 2020 10 400
 
 #K count 
-java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 30000 400000 2020 5 400
-java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 30000 400000 2020 10 400
-java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 30000 400000 2020 15 400
-java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 30000 400000 2020 20 400
+java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 30000 500000 2020 5 400
+java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 30000 500000 2020 10 400
+java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 30000 500000 2020 15 400
+java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestRandom 30000 500000 2020 20 400
 
 mv target/test_result.csv target/random_result.csv
 git add target/random_result.csv
