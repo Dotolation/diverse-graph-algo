@@ -18,7 +18,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	public int tests;
 	
 	private List<V> vList;
-	private static Random rand = new Random(2021);
+	protected static Random rand;
 
 	
 	public boolean isUsable() {

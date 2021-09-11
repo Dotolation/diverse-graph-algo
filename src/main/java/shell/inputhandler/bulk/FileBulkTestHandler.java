@@ -1,5 +1,7 @@
 package shell.inputhandler.bulk;
 
+import java.util.Random;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import graphgenerators.FileToGraph;
@@ -12,6 +14,9 @@ public class FileBulkTestHandler extends BulkTestHandler<Integer, DefaultWeighte
 		
 		k = Integer.parseInt(args[1]);
 		tests = Integer.parseInt(args[2]);
+		int seed = Integer.parseInt(args[3]);
+		
+		rand = new Random(seed);
 		
 		if(type.equals("DIMACS")){
 			

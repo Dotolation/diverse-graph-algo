@@ -27,7 +27,7 @@ public class SimpleGnmRandom {
         	
         	int u = rand.nextInt(n) + 1;
         	int v = rand.nextInt(n) + 1;
-        	double weight = rand.nextInt(3) + 1;
+        	double weight = rand.nextInt(100) + 1;
         	
         	if(u==v || graph.getEdge(v, u) != null) continue; 
         	
