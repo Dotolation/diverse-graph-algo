@@ -1,6 +1,8 @@
 # 1. Installing Maven & Pandas
 
-First, make sure that Maven (for importing JGraphT) and Pandas(for data analysis) are installed. 
+First, please install Java (JDK11) and Python 3 if they are not already. 
+
+Next, make sure that Maven (for importing JGraphT) and Pandas(for data analysis) are installed. 
 To install Maven on Ubuntu, type the following commands on terminal:
 
 sudo apt-get update
