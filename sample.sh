@@ -7,9 +7,9 @@ java -Xss1G -cp $CLASSPATHS shell.TestSNAP slashdot.txt.gz 10 80 7777
 java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP twitter_combined.txt.gz 10 80 7777
 
 #DIMACS
-java -Xms24G -Xmx48G -Xmn36G -Xss1G -cp $CLASSPATHS shell.TestDIMACS nyc_dist.gr.gz 80 7777
+java -Xms24G -Xmx48G -Xmn36G -Xss1G -cp $CLASSPATHS shell.TestDIMACS nyc_dist.gr.gz 10 80 7777
 java -Xms24G -Xmx48G -Xmn36G -Xss1G -cp $CLASSPATHS shell.TestDIMACS florida_dist.gr.gz 10 80 7777
 
-#Name change from "test_result.csv" to other name
+#Assign other name to the default output CSV file, which is test_result.csv
 mv target/test_result.csv target/sample_result.csv
 
