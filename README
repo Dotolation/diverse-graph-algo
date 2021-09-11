@@ -1,0 +1,38 @@
+# 1. Installing Maven & Pandas
+
+First, make sure that Maven (for importing JGraphT) and Pandas(for data analysis) are installed. 
+To install Maven on Ubuntu, type the following commands on terminal:
+
+sudo apt-get update
+sudo apt-get install maven
+
+For Pandas, type the following:
+
+pip3 install pandas
+( sudo apt-get install python3-pip  if pip is not installed already)
+
+# 2. Compilation
+
+Type the following to compile this project:
+
+mvn compile 
+
+# 3. Running the code
+
+Below is the command for running tests for SNAP(DIMACS) and grid data. 
+
+java -Xms24G -Xmx48G -Xmn36G -Xss1G -cp $CLASSPATHS shell.TestSNAP (the filename of data; just the name and not the path) (# of tests) (randomization seed)
+java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestGrid (Maximum dimension) (dimension increment) [List of the values for k, space-separated]
+
+For the data, check "src/SNAP(or DIMACS)".
+Output "test_result.csv" will be saved on "target" directory.
+
+Check if 'CLASSPATHS' is set properly.
+Please refer to " sample.sh " for examples & further details. 
+
+#4. Obtaining average processing time and diversity
+
+First, move to the target directory. Then run get_averages.py
+
+python3 get_averages (.csv file name) [list of the values for k, space-separated. Optional parameter.]
+
