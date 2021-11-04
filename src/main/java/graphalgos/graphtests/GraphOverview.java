@@ -7,6 +7,7 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.EppsteinShortestPathIterator;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import graphalgos.Preprocess;
 
@@ -21,18 +22,25 @@ public class GraphOverview extends DemoRun {
 	public int vCountPaths;
 	public int eCountPaths; 
 	
-	public <V,E> GraphOverview(Graph<V, E> g, V s, V t) {
+	public <V,E> GraphOverview() {
+
+		
+	}
+	
+	public <V,E> Graph<V,E> getGraph(Graph<V, E> g, V s, V t){
 		
 		vCount = g.vertexSet().size();
 		eCount = g.edgeSet().size();
-		//startWatch();
-		overview(Preprocess.clean(g,s,t), s, t);
-		//stopWatch(elapsed);
-		//System.out.println(this.elapsed + "milisecond for preprocessing.");
-	}
-	
-	
-	
+		
+		startWatch();
+		Graph<V,E> cleanGraph = (Graph<V,E>) Preprocess.clean(g,s,t); 
+		measurePreprocessingTime();
+		
+		overview(cleanGraph, s, t);
+		
+		return cleanGraph;
+
+	} 
 
 	private <V,E> void overview(Graph<V, E> g, V source, V target) {
 

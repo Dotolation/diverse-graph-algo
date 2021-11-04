@@ -60,7 +60,7 @@ public class DiverseMeasure {
 
 					Set<DefaultWeightedEdge> b = es.get(j);
 				
-					if(a.equals(b)) System.out.println("Man that's weird!");
+					//if(a.equals(b)) System.out.println(String.format("Path #%d and #%d are identical.", i, j ));
 					
 					//Compute the intersection first 
 					Set<DefaultWeightedEdge> overlap = new HashSet<>(a);

@@ -31,6 +31,7 @@ public abstract class DemoRun {
 		start = Instant.now();
 		
 	}
+
 	
 	protected void measurePreprocessingTime() {
 		
@@ -48,10 +49,19 @@ public abstract class DemoRun {
 		
 	}
 	
+	protected void measureFinalTime(long preprocessingTime) {
+		
+		finish = Instant.now();
+		finish = finish.plusMillis(preprocessingTime);
+		
+		preprocessElapsed = preprocessingTime;
+		elapsed = Duration.between(start, finish).toMillis();
+		
+	}
+	
 	protected <V> void calculateD(List<Set<DefaultWeightedEdge>> edgeSets, Graph<V,DefaultWeightedEdge> g) {
 		
 		diversityMeasure = DiverseMeasure.compute(edgeSets, g, DiverseMeasure::weightedSum);
-		System.out.println("unweighted");
 		unweightedDiversity = DiverseMeasure.compute(edgeSets, g, DiverseMeasure::sum);
 		
 		minDiversity = DiverseMeasure.computeMinOrMax(edgeSets, g, true, DiverseMeasure::weightedSum);

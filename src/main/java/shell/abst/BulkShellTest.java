@@ -28,8 +28,8 @@ public abstract class BulkShellTest extends AbstractShellTest {
 			iters++;
 			visited.add(pair);
 			
-			DiverseShell.run(h);
-			KBestShell.run(h);
+			CleanDiverseShell.run(h);
+			CleanKBestShell.run(h);
 			
 		}
 		

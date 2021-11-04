@@ -167,33 +167,37 @@ public class DiverseShortestPaths <V,E> {
 		for (DefaultWeightedEdge e : kDuplicate.outgoingEdgesOf(source)) pathList.add(new HashSet<>());
 		
 		for(Set<DefaultWeightedEdge> path : pathList) {
-			
-			V start = source;
-			GraphIterator<V, DefaultWeightedEdge> dfs = new DepthFirstIterator<>(kDuplicate, start);
+				
+			GraphIterator<V, DefaultWeightedEdge> dfs = new DepthFirstIterator<>(kDuplicate, source);
+			V start = dfs.next();
+			//StringBuffer s = new StringBuffer(start.toString());
 			
 			while(!start.equals(target)) {
 				
 				V next = dfs.next();
+				//s.append("->");
 				
 				DefaultWeightedEdge toRemove = kDuplicate.getEdge(start, next);
+				kDuplicate.removeEdge(toRemove);
 				
-				if(toRemove != null) {
-					kDuplicate.removeEdge(toRemove);
-					
-					DefaultWeightedEdge toAdd = gPrime.getEdge(start, next);
-					if (toAdd != null) path.add(toAdd);
-					start = next;
-					
-				} else {
-					System.out.println("nullDetected");
-					break; 
-				}
+				DefaultWeightedEdge toAdd = gPrime.getEdge(start, next);
+				
+				/*
+				 * if (toAdd != null) { s.append(next.toString()); } else {
+				 * s.append(String.format("null(%s)", next.toString())); }
+				 */
+				path.add(toAdd);
+				
+				start = next; 
 			}
+			
+			//System.out.println(s.toString());
 			
 		}
 		
 		return pathList;
 		
 	}
+
 
 }

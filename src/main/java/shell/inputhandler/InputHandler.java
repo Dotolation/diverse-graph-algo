@@ -10,6 +10,7 @@ public abstract class InputHandler<V,E>{
 	public String instanceName;
 	
 	public Graph<V, E> g; 
+	public Graph<V, E> cleanG; 
 	public V source;
 	public V target; 
 	
@@ -19,7 +20,8 @@ public abstract class InputHandler<V,E>{
 
 	public GraphOverview setOverview() {
 		
-		overview = new GraphOverview(g, source, target);
+		overview = new GraphOverview();
+		cleanG = overview.getGraph(g, source, target);
 		return overview;
 		
 	}
