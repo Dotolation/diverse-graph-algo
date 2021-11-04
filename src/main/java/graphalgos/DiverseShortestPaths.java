@@ -27,10 +27,10 @@ import graphalgos.graphtests.DemoRun;
 
 public class DiverseShortestPaths <V,E> {
 	
-	private Graph<V, E> g;
-	private V source;
-	private V target;
-	private int k;
+	public Graph<V, E> g;
+	public V source;
+	public V target;
+	public int k;
 	
 	public Graph<V, DefaultWeightedEdge> gPrime;
 	private Graph<V, DefaultWeightedEdge> kDuplicate;
@@ -44,19 +44,11 @@ public class DiverseShortestPaths <V,E> {
 		
 		//initialization
 		kDuplicate = new DirectedWeightedMultigraph<>(DefaultWeightedEdge.class);
-
-		//preprocess();
-		gPrime = Preprocess.clean(g, source, target);
-		kDuplication(gPrime);
-		//eppsteinPreprocess(gPrime);
-
-		minCostFlow();
-
 		
 	}
 		
 	//#1: 最短距離ではない辺を削除 + kDuplication 
-	private void kDuplication (Graph<V,DefaultWeightedEdge> gr){
+	public void kDuplication (Graph<V,DefaultWeightedEdge> gr){
 		
 		/*initialization of shortest path class (Djikstra)
 		  https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/shortestpath/package-summary.html
@@ -124,7 +116,7 @@ public class DiverseShortestPaths <V,E> {
 	}
 	
 	//#2 minCostFlowでFlow Networkを求める
-	private void minCostFlow(){
+	public void minCostFlow(){
 		
 		//0 <= edge capacity <= 1
 		Function<DefaultWeightedEdge, Integer> minCapacity = edge -> 0; 
@@ -182,11 +174,20 @@ public class DiverseShortestPaths <V,E> {
 			while(!start.equals(target)) {
 				
 				V next = dfs.next();
-				kDuplicate.removeEdge(kDuplicate.getEdge(start, next));
-				path.add(gPrime.getEdge(start, next));
 				
-				start = next;
+				DefaultWeightedEdge toRemove = kDuplicate.getEdge(start, next);
 				
+				if(toRemove != null) {
+					kDuplicate.removeEdge(toRemove);
+					
+					DefaultWeightedEdge toAdd = gPrime.getEdge(start, next);
+					if (toAdd != null) path.add(toAdd);
+					start = next;
+					
+				} else {
+					System.out.println("nullDetected");
+					break; 
+				}
 			}
 			
 		}

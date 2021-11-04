@@ -25,9 +25,9 @@ public class GraphOverview extends DemoRun {
 		
 		vCount = g.vertexSet().size();
 		eCount = g.edgeSet().size();
-		startWatch();
+		//startWatch();
 		overview(Preprocess.clean(g,s,t), s, t);
-		stopWatch();
+		//stopWatch(elapsed);
 		//System.out.println(this.elapsed + "milisecond for preprocessing.");
 	}
 	

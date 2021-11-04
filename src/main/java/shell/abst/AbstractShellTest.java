@@ -31,7 +31,10 @@ public abstract class AbstractShellTest {
 				  Integer.toString(o.vCount), Integer.toString(o.eCount),
 				  Integer.toString(o.vCountPaths), Integer.toString(o.eCountPaths),
 				  Integer.toString(o.stPathCount), Double.toString(o.avgPathLength),
-				  Long.toString(algo.elapsed),Double.toString(algo.diversityMeasure));
+				  Long.toString(algo.elapsed), Long.toString(algo.preprocessElapsed),
+				  Double.toString(algo.diversityMeasure), Double.toString(algo.unweightedDiversity), 
+				  Double.toString(algo.minDiversity), Double.toString(algo.maxDiversity),
+				  Double.toString(algo.minUnweighted), Double.toString(algo.maxUnweighted));
 		
 		
 		
@@ -52,7 +55,8 @@ public abstract class AbstractShellTest {
 				out.write("Instance_Name,Algo_Type,Source,Target,k,"
 					+ "#V,#E,#V_stPaths,#E_stPaths,"
 					+ "#stPaths,Avg_stPath_Length,"
-					+ "Milliseconds,Diversity");
+					+ "Milliseconds, PrepMillisec," 
+					+ "Diversity, UnweightedDiv, MinDiv, MaxDiv, MinUnw, MaxUnw");
 				
 				out.newLine();
 			}

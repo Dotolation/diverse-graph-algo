@@ -23,6 +23,8 @@ public class KBestAlgoRun extends DemoRun {
 		startWatch();
 		
 		Graph<V,DefaultWeightedEdge> cleaned = Preprocess.clean(g, source, target);
+		
+		measurePreprocessingTime(); //Time taken to remove vertices/
 
 		Iterator<GraphPath<V, DefaultWeightedEdge>> epp = new EppsteinShortestPathIterator<>(cleaned, source, target);
 		
@@ -32,7 +34,7 @@ public class KBestAlgoRun extends DemoRun {
 			counter++;
 		}
 		
-		stopWatch();
+		measureFinalTime();
 		
 		List<Set<DefaultWeightedEdge>> edgeSets = kPaths.stream().map(path -> new HashSet<>(path.getEdgeList())).collect(Collectors.toList());
 		//edgeSets.forEach(edgeSet -> System.out.println(edgeSet));

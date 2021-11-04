@@ -7,6 +7,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import graphalgos.DiverseShortestPaths;
+import graphalgos.Preprocess;
 
 public class DiverseAlgoRun extends DemoRun {
 	
@@ -23,9 +24,16 @@ public class DiverseAlgoRun extends DemoRun {
 		startWatch();
 		
 		DiverseShortestPaths<V, E> divAlgo = new DiverseShortestPaths<>(g, source, target, k);
-		List<Set<DefaultWeightedEdge>> edgeSetLists = divAlgo.paths();
 		
-		stopWatch();
+		divAlgo.gPrime = Preprocess.clean(divAlgo.g, source, target);
+		measurePreprocessingTime();
+		
+		divAlgo.kDuplication(divAlgo.gPrime);
+		divAlgo.minCostFlow();
+		
+		List<Set<DefaultWeightedEdge>> edgeSetLists = divAlgo.paths();
+		measureFinalTime();
+		
 		calculateD(edgeSetLists, divAlgo.gPrime);
 		
 	}
