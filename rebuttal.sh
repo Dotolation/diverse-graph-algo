@@ -12,4 +12,13 @@ java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestDIMACS co_dist.gr.g
 
 #More SNAPS
 java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP wiki-talk.txt.gz 10 400 2021
-#java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP google.txt.gz 10 400 2021
+java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP google.txt.gz 10 400 2021
+
+#Grids
+java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestGrid 100 25 10 25 50
+
+#Git stuff
+mv target/test_result.csv target/response_result.csv
+git add target/response_result.csv
+git commit -m "Completed the experiment for the author response"
+git push origin
