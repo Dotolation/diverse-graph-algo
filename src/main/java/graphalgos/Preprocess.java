@@ -3,8 +3,10 @@ package graphalgos;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.jgrapht.Graph;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -14,7 +16,7 @@ public class Preprocess {
 	
 	public static <V,E> Graph<V,DefaultWeightedEdge> clean(Graph<V, E> g, V s, V t){
 		
-		//System.out.println(String.format("(Before) vertices: %d edges: %d", g.vertexSet().size(), g.edgeSet().size()));
+		//System.out.println(String.format("(Before) vertices: %d edges: %d", g.vertexSet().size(), g.edgeSet().size()));        
 		
 		Graph<V, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
@@ -42,41 +44,59 @@ public class Preprocess {
 		});
 
         Graph<V, DefaultWeightedEdge> firstPass = vertexClean(graph, s, t);
-        //System.out.println(String.format("(firstPass) verticces: %d edges: %d", firstPass.vertexSet().size(), firstPass.edgeSet().size()));
         
+        //Island Removal
+        ConnectivityInspector<V, DefaultWeightedEdge> cinspct = new ConnectivityInspector<>(firstPass);
+        List<Set<V>> comps = cinspct.connectedSets();
+        int islandCountPre = comps.size();
+
         
-		/*
-		 * //SecondPass
-		 * 
-		 * Graph<V, DefaultWeightedEdge> flipped = flipEdges(firstPass);
-		 * SingleSourcePaths<V, DefaultWeightedEdge> shortestRev = new
-		 * DijkstraShortestPath<>(flipped).getPaths(t);
-		 * 
-		 * Graph<V, DefaultWeightedEdge> graph2 = new
-		 * SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-		 * 
-		 * flipped.edgeSet().forEach(e -> {
-		 * 
-		 * V u = flipped.getEdgeSource(e); V v = flipped.getEdgeTarget(e); double weight
-		 * = flipped.getEdgeWeight(e);
-		 * 
-		 * double uDist = shortestRev.getWeight(u); double vDist =
-		 * shortestRev.getWeight(v);
-		 * 
-		 * if (uDist + weight <= vDist) { graph2.addVertex(u); graph2.addVertex(v);
-		 * DefaultWeightedEdge edge = graph2.addEdge(u, v); graph2.setEdgeWeight(edge,
-		 * weight);
-		 * 
-		 * }
-		 * 
-		 * });
-		 * 
-		 * Graph<V, DefaultWeightedEdge> gPrime = vertexClean(graph2, s); gPrime =
-		 * flipEdges(gPrime);
-		 * 
-		 * System.out.println(String.format("(After) verticces: %d edges: %d",
-		 * gPrime.vertexSet().size(), gPrime.edgeSet().size()));
-		 */
+        if(islandCountPre > 1) {
+        	
+        	for (Set<V> component : comps) {
+        		
+        		if(!component.contains(s)) {
+        			
+        			firstPass.removeAllVertices(component);
+        		}
+        		
+        	}
+        	
+        }
+//        
+//        
+//		
+//		  //SecondPass
+//		  
+//		  Graph<V, DefaultWeightedEdge> flipped = flipEdges(firstPass);
+//		  SingleSourcePaths<V, DefaultWeightedEdge> shortestRev = new
+//		  DijkstraShortestPath<>(flipped).getPaths(t);
+//		  
+//		  Graph<V, DefaultWeightedEdge> graph2 = new
+//		  SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+//		  
+//		  flipped.edgeSet().forEach(e -> {
+//		  
+//		  V u = flipped.getEdgeSource(e); V v = flipped.getEdgeTarget(e); double weight
+//		  = flipped.getEdgeWeight(e);
+//		  
+//		  double uDist = shortestRev.getWeight(u); double vDist =
+//		  shortestRev.getWeight(v);
+//		  
+//		  if (uDist + weight <= vDist) { graph2.addVertex(u); graph2.addVertex(v);
+//		  DefaultWeightedEdge edge = graph2.addEdge(u, v); graph2.setEdgeWeight(edge,
+//		  weight);
+//		  
+//		  }
+//		  
+//		  });
+//		  
+//		  Graph<V, DefaultWeightedEdge> gPrime = vertexClean(graph2, t, s); 
+//		  gPrime = flipEdges(gPrime);
+//		  
+//		  System.out.println(String.format("(After) verticces: %d edges: %d",
+//		  gPrime.vertexSet().size(), gPrime.edgeSet().size()));
+		 
 		
 		return firstPass; 
 		
