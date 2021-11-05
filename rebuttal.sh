@@ -11,5 +11,5 @@ java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestDIMACS florida_dist
 java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestDIMACS co_dist.gr.gz 10 400 2021
 
 #More SNAPS
-#java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP wiki-talk.txt.gz 10 400 2021
+java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP wiki-talk.txt.gz 10 400 2021
 #java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP google.txt.gz 10 400 2021
