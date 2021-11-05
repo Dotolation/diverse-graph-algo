@@ -8,11 +8,11 @@ java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP twitter_combin
 #DIMACS
 java -Xms8G -Xmx32G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestDIMACS nyc_dist.gr.gz 10 100 2021
 java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestDIMACS florida_dist.gr.gz 10 100 2021
-java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestDIMACS co_dist.gr.gz 10 400 2021
+java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestDIMACS co_dist.gr.gz 10 100 2021
 
 #More SNAPS
-java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP wiki-talk.txt.gz 10 400 2021
-java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP google.txt.gz 10 400 2021
+java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP wiki-talk.txt.gz 10 100 2021
+java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP google.txt.gz 10 100 2021
 
 #Grids
 java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestGrid 100 25 10 25 50
