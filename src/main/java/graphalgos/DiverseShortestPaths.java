@@ -110,7 +110,7 @@ public class DiverseShortestPaths <V,E> {
 		
 		for (int i = 1; i <= k; i++) {
 			DefaultWeightedEdge newEdge = kDuplicate.addEdge(u, v);
-			kDuplicate.setEdgeWeight(newEdge, w - 2*i + 1); //w'の公式
+			kDuplicate.setEdgeWeight(newEdge, w * (k - 2*i + 1)); //w'の公式
         }
 
 	}
