@@ -170,6 +170,10 @@ public class DiverseBipartiteMatching <V, E> {
 		
 	}
 	
+	public void decompose() {
+		//TODO
+	}
+	
 	
 	
 	

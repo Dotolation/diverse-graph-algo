@@ -189,6 +189,7 @@ public class DiverseShortestPaths <V,E> {
 				path.add(toAdd);
 				
 				start = next; 
+				
 			}
 			
 			//System.out.println(s.toString());
