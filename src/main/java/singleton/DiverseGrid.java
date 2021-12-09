@@ -1,4 +1,4 @@
-package shell;
+package singleton;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 

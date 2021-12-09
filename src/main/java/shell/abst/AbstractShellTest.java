@@ -52,11 +52,11 @@ public abstract class AbstractShellTest {
 			
 			BufferedWriter out = new BufferedWriter(new FileWriter(path, true));
 			if(!exists) {
-				out.write("Instance_Name,Algo_Type,Source,Target,k,"
-					+ "#V,#E,#V_stPaths,#E_stPaths,"
-					+ "#stPaths,Avg_stPath_Length,"
-					+ "Milliseconds, PrepMillisec," 
-					+ "Diversity, UnweightedDiv, MinDiv, MaxDiv, MinUnw, MaxUnw");
+				out.write("instance_name,algo_type,source,target,k,"
+					+ "vertices,edges,vertices_preprocess,edges_preprocess,"
+					+ "path_count,avg_length,"
+					+ "ms, ms_preprocess," 
+					+ "diversity, diversity_uw, div_min, div_max, min_uw, max_uw");
 				
 				out.newLine();
 			}
