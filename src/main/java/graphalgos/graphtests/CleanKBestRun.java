@@ -26,7 +26,7 @@ public class CleanKBestRun extends DemoRun {
 		Iterator<GraphPath<V, DefaultWeightedEdge>> epp = new EppsteinShortestPathIterator<>(cleaned, source, target);
 		
 		int counter = 0;
-		while(epp.hasNext()) {
+		while(epp.hasNext() && counter < 1000000) {
 			kPaths.add(epp.next());
 			counter++;
 			if (counter == k) measureFinalTime(preprocessingTime);
