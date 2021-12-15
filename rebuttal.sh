@@ -19,6 +19,6 @@ java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestGrid 140 10 10 50 
 
 #Git stuff
 mv target/test_result.csv target/arXiv_result.csv
-git add target/ArXiv_result.csv
+git add target/arXiv_result.csv
 git commit -m "Completed ArXiv experiment"
 git push origin
