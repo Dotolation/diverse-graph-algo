@@ -12,11 +12,7 @@ public class GridInputHandler extends InputHandler<String, DefaultWeightedEdge> 
 		int y = Integer.parseInt(args[1]);
 		k = Integer.parseInt(args[2]);
 		
-		instanceName = String.format("Grid%d_%d", x, y);
-		SimpleGrid grid = new SimpleGrid(x, y);
-		g = grid.graph;
-		source = grid.source;
-		target = grid.target;
+		sharedSetup(x, y, k);	
 
 	}
 	
@@ -25,14 +21,22 @@ public class GridInputHandler extends InputHandler<String, DefaultWeightedEdge> 
 		int x = dim;
 		int y = dim;
 		
-		this.k = k;
+		sharedSetup(x, y, k);
+			
+	}
+	
+	private void sharedSetup(int x, int y, int k) {
 		
 		instanceName = String.format("Grid%d_%d", x, y);
 		SimpleGrid grid = new SimpleGrid(x, y);
 		g = grid.graph;
+		
 		source = grid.source;
 		target = grid.target;
-			
+		this.k = k;
+		
+		setOverview();
+		
 	}
 
 }

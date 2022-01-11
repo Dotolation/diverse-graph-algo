@@ -1,12 +1,12 @@
-package singleton;
+package shell.singleton;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import shell.abst.KBestShell;
+import shell.abst.DiverseShell;
 import shell.inputhandler.GridInputHandler;
 import shell.inputhandler.InputHandler;
 
-public class KBestGrid extends KBestShell {
+public class DiverseGrid extends DiverseShell {
 
 	public static void main(String[] args) {
 		

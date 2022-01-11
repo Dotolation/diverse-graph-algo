@@ -30,11 +30,11 @@ public class Simulation {
 	}
 	
 	@SuppressWarnings("unused")
-	private static <V,E> void simulate(Graph<V,E> g, V s, V t, int k, String msg) {
+	private static <V,E> void simulate(Graph<V,DefaultWeightedEdge> g, V s, V t, int k, String msg) {
 		
 		//DemoRun Diverse = new DiverseAlgoRun(g, s, t, k, msg);
 		//System.out.println(Diverse.elapsed);
-		DemoRun KBest = new KBestAlgoRun(g, s, t, k, msg);
+		DemoRun KBest = new GridKBestRun(g, s, t, k);
 		System.out.println(KBest.elapsed);
 		
 		

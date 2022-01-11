@@ -9,24 +9,18 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import graphalgos.DiverseShortestPaths;
 import graphalgos.Preprocess;
 
-public class DiverseAlgoRun extends DemoRun {
+public class GridDiverseRun extends DemoRun {
 	
+	//No Preprocessing.
+	//This class is just for testing the grid graph. 
 	
-	public <V, E> DiverseAlgoRun(Graph<V, E> g, V source, V target, int k, String message) {
-		
-		/*
-		 * Diverse Algorithm. 
-		 * 		
-		 */
-		
+	public <V, E> GridDiverseRun(Graph<V, E> g, V source, V target, int k) {
+
 		//System.out.println(String.format("---Diverse Algo: %s---", message));
-		
-		startWatch();
-		
 		DiverseShortestPaths<V, E> divAlgo = new DiverseShortestPaths<>(g, source, target, k);
 		
-		divAlgo.gPrime = Preprocess.clean(divAlgo.g, source, target);
-		measurePreprocessingTime();
+		divAlgo.gPrime = (Graph<V, DefaultWeightedEdge>) g;
+		startWatch();
 		
 		divAlgo.kDuplication(divAlgo.gPrime);
 		divAlgo.minCostFlow();
