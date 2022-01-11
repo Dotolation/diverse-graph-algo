@@ -62,7 +62,7 @@ public class GraphOverview extends DemoRun {
 		while(epp.hasNext()) {
 
 			GraphPath<V, E> next = epp.next();
-			if(next.getWeight() > w || count > 5000000 ) break;
+			if(next.getWeight() > w || count > 200000 ) break;
 			
 			count++;
 			pathLengthSum += next.getLength();
