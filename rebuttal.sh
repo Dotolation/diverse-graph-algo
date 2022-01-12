@@ -15,7 +15,7 @@ export CLASSPATHS="target/classes:/home/ymmtlab/.m2/repository/org/jgrapht/jgrap
 #java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP google.txt.gz 10 400 2021
 
 #Grids
-#java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestGrid 140 10 10 50 100
+java -Xms32G -Xmx64G -Xmn48G -Xss1G -cp $CLASSPATHS shell.TestGrid 150 10 10 50 100
 
 #Git stuff
 mv target/test_result.csv target/grid_result.csv
