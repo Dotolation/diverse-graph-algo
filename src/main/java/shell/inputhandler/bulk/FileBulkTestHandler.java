@@ -25,6 +25,7 @@ public class FileBulkTestHandler extends BulkTestHandler<Integer, DefaultWeighte
 		} else if(type.equals("SNAP")) {
 			
 			g = FileToGraph.read(String.format("src/%s/%s", type, instanceName), FileToGraph::readSNAP);
+			//isSNAP = true;
 		}
 		
 	}

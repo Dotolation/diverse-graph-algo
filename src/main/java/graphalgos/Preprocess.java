@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
@@ -13,6 +16,60 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 public class Preprocess {
+	
+	
+	public static <V,E> Graph<V,E> processSNAP(Graph<V,E> g , V s, V t){
+		Graph<V, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+		System.out.println("Began ProcessSNAP");
+		
+		Boolean reachedT = false;
+		Set<V> visited = new HashSet<>();
+		
+		Deque<V> currentDepth = new ArrayDeque<>(); 
+		currentDepth.add(s);
+		graph.addVertex(s);
+		
+		
+		while(!reachedT) {
+			Deque<V> nextDepth = new ArrayDeque<>();
+			
+			while(!currentDepth.isEmpty()) {
+				V curr = currentDepth.pop();
+				if (visited.contains(curr)) continue;
+				
+				if (curr.equals(t)) {
+					reachedT = true;
+					visited.add(curr);
+					continue;
+				} 
+				
+				
+				if(!reachedT) {
+					visited.add(curr);
+					g.outgoingEdgesOf(curr).forEach(e -> {
+						V outNeigh = g.getEdgeTarget(e);
+						nextDepth.add(outNeigh);
+						graph.addVertex(outNeigh);
+						graph.addEdge(curr, outNeigh);
+					});
+				} else {
+					continue;
+				}
+				
+				
+			}
+			
+			currentDepth = nextDepth;
+			
+		}
+		
+		System.out.println("Ending...");
+		System.out.println(graph.vertexSet().size()+","+graph.edgeSet().size());
+		
+		
+		return (Graph<V,E>) graph;
+		
+	}
 	
 	public static <V,E> Graph<V,DefaultWeightedEdge> clean(Graph<V, E> g, V s, V t){
 		

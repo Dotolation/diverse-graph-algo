@@ -19,6 +19,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 	
 	private List<V> vList;
 	protected static Random rand;
+	protected boolean isSNAP = false;
 
 	
 	public boolean isUsable() {
@@ -27,16 +28,18 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 		GraphPath<V,E> path = fw.getPath(source, target);
 
 		if(path==null) { 
-			//System.out.println("no such path exists");
 			return false;
 			
-		} else {
-			//System.out.println();
-			//System.out.println(path);
-		}
+		} 
 		
 		try {
-			GraphOverview o = this.setOverview();
+			GraphOverview o;
+			if(isSNAP) {
+				o = this.snapOverview();
+			} else {
+				o = this.setOverview();
+			}
+			
 			goodPath = (o.stPathCount >= 3 * k && o.avgPathLength >= 3.0); 
 			
 		} catch (Exception e) {
