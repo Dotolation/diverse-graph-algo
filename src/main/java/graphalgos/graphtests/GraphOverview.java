@@ -45,27 +45,6 @@ public class GraphOverview extends DemoRun {
 
 	}
 	
-	public <V,E> Graph<V,E> getGraph(Graph<V, E> g, V s, V t, boolean isSNAP){
-		
-		if(!isSNAP) return null;
-		
-		vCount = g.vertexSet().size();
-		eCount = g.edgeSet().size();
-		
-		startWatch();
-		Graph<V,E> cleanGraph = Preprocess.processSNAP(g,s,t); 
-		cleanGraph = (Graph<V,E>) Preprocess.clean(cleanGraph,s,t); 
-		measurePreprocessingTime();
-		
-		//System.out.println("Preprocessing Time (ms): " + Long.toString(preprocessElapsed));
-		//System.out.println(String.format("Cleaned vcount: %d, eCount: %d", cleanGraph.vertexSet().size(), cleanGraph.edgeSet().size()));
-		
-		overview(cleanGraph, s, t);
-		
-		return cleanGraph;
-
-	}
-	
 	
 
 	private <V,E> void overview(Graph<V, E> g, V source, V target) {

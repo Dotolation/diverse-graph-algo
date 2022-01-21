@@ -35,7 +35,7 @@ public abstract class BulkTestHandler<V,E> extends InputHandler<V, E> {
 		try {
 			GraphOverview o;
 			if(isSNAP) {
-				o = this.snapOverview();
+				o = this.setOverview();
 			} else {
 				o = this.setOverview();
 			}

@@ -7,77 +7,32 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Deque;
 import java.util.ArrayDeque;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.util.ConcurrencyUtil;
+import org.jgrapht.alg.shortestpath.DeltaSteppingShortestPath;
 
 public class Preprocess {
-	
-	
-	public static <V,E> Graph<V,E> processSNAP(Graph<V,E> g , V s, V t){
-		Graph<V, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-		System.out.println("Began ProcessSNAP");
-		
-		Boolean reachedT = false;
-		Set<V> visited = new HashSet<>();
-		
-		Deque<V> currentDepth = new ArrayDeque<>(); 
-		currentDepth.add(s);
-		graph.addVertex(s);
-		
-		
-		while(!reachedT) {
-			Deque<V> nextDepth = new ArrayDeque<>();
-			
-			while(!currentDepth.isEmpty()) {
-				V curr = currentDepth.pop();
-				if (visited.contains(curr)) continue;
-				
-				if (curr.equals(t)) {
-					reachedT = true;
-					visited.add(curr);
-					continue;
-				} 
-				
-				
-				if(!reachedT) {
-					visited.add(curr);
-					g.outgoingEdgesOf(curr).forEach(e -> {
-						V outNeigh = g.getEdgeTarget(e);
-						nextDepth.add(outNeigh);
-						graph.addVertex(outNeigh);
-						graph.addEdge(curr, outNeigh);
-					});
-				} else {
-					continue;
-				}
-				
-				
-			}
-			
-			currentDepth = nextDepth;
-			
-		}
-		
-		System.out.println("Ending...");
-		System.out.println(graph.vertexSet().size()+","+graph.edgeSet().size());
-		
-		
-		return (Graph<V,E>) graph;
-		
-	}
 	
 	public static <V,E> Graph<V,DefaultWeightedEdge> clean(Graph<V, E> g, V s, V t){
 		
 		//System.out.println(String.format("(Before) vertices: %d edges: %d", g.vertexSet().size(), g.edgeSet().size()));        
 		
+		ThreadPoolExecutor th = ConcurrencyUtil.createThreadPoolExecutor(8);
+		
 		Graph<V, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
-
-		SingleSourcePaths<V, E> shortest = new DijkstraShortestPath<>(g).getPaths(s);
+		
+		
+		SingleSourcePaths<V, E> shortest = new DeltaSteppingShortestPath<>(g,th).getPaths(s);
+		th.shutdown();
+		
 
         g.edgeSet().forEach(e -> {
         	

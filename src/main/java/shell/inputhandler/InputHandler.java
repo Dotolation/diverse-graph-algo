@@ -25,14 +25,5 @@ public abstract class InputHandler<V,E>{
 		return overview;
 		
 	}
-	
-	public GraphOverview snapOverview() {
-		
-		overview = new GraphOverview();
-		cleanG = overview.getGraph(g, source, target, true);
-		return overview;
-		
-	}
-	
 
 }
