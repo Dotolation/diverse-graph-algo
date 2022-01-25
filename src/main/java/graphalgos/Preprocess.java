@@ -13,7 +13,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.util.ConcurrencyUtil;
@@ -29,9 +28,12 @@ public class Preprocess {
 		
 		Graph<V, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 		
-		
-		SingleSourcePaths<V, E> shortest = new DeltaSteppingShortestPath<>(g,th).getPaths(s);
-		th.shutdown();
+		SingleSourcePaths<V, E> shortest = new DeltaSteppingShortestPath(g,2.0,th).getPaths(s);
+		try {
+			ConcurrencyUtil.shutdownExecutionService(th);
+		} catch (Exception e) {
+			System.out.println("lol");
+		}
 		
 
         g.edgeSet().forEach(e -> {
