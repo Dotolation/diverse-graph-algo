@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
@@ -24,39 +25,36 @@ public class Preprocess {
 		
 		//System.out.println(String.format("(Before) vertices: %d edges: %d", g.vertexSet().size(), g.edgeSet().size()));        
 		
-		ThreadPoolExecutor th = ConcurrencyUtil.createThreadPoolExecutor(8);
-		
 		Graph<V, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+		//SingleSourcePaths<V, E> shortest = new DijkstraShortestPath(g).getPaths(s);
+		//Double maxdist = shortest.getWeight(t);
+		
+		int coreCount = 8;
+		ThreadPoolExecutor th = ConcurrencyUtil.createThreadPoolExecutor(coreCount);
+		
 		
 		SingleSourcePaths<V, E> shortest = new DeltaSteppingShortestPath(g,2.0,th).getPaths(s);
+		double maxLength = shortest.getWeight(t);
+		
 		try {
 			ConcurrencyUtil.shutdownExecutionService(th);
 		} catch (Exception e) {
 			System.out.println("lol");
 		}
-		
-
-        g.edgeSet().forEach(e -> {
+		        
+        g.edgeSet().stream()
+        .filter(e -> edgeFilter(e, g, t, shortest, maxLength)).collect(Collectors.toList())
+        .forEach(e -> {
+        	V u = g.getEdgeSource(e);
+        	V v = g.getEdgeTarget(e);
         	
-			V u = g.getEdgeSource(e);
-			V v = g.getEdgeTarget(e);
-			double weight = g.getEdgeWeight(e);
-			
-			double uDist = shortest.getWeight(u);
-			double vDist = shortest.getWeight(v);
-
-			if (uDist + weight <= vDist) {
-				graph.addVertex(u);
-			    graph.addVertex(v);
-			    DefaultWeightedEdge edge = graph.addEdge(u, v);
-			    graph.setEdgeWeight(edge, weight);
-				
-			}	
-		    
-
-			
-		});
-
+        	graph.addVertex(u);
+        	graph.addVertex(v);
+        	
+        	graph.setEdgeWeight(graph.addEdge(u,v), g.getEdgeWeight(e));
+        	
+        });
+              
         Graph<V, DefaultWeightedEdge> firstPass = vertexClean(graph, s, t);
         
         //Island Removal
@@ -116,21 +114,44 @@ public class Preprocess {
 		
 	}
 	
+	private static <V,E> boolean edgeFilter(E e, Graph<V,E> g, V t,SingleSourcePaths<V, E> shortest,
+			double maxLength) {
+		
+		V u = g.getEdgeSource(e);
+		double uDist = shortest.getWeight(u);
+		
+		if (uDist >= maxLength) return false;
+		
+		V v = g.getEdgeTarget(e);
+		double vDist = shortest.getWeight(v);
+		if (vDist >= maxLength && !v.equals(t)) return false;
+		
+		double weight = g.getEdgeWeight(e);
+
+		if (uDist + weight <= vDist) {
+			return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
 	private static <V> Graph<V, DefaultWeightedEdge> vertexClean(Graph<V,DefaultWeightedEdge> g, V s, V t) {
 		
 		boolean breakLoop = false; 
 		
 		while(!breakLoop) {
 			
-			List<V> vList = new ArrayList<>(g.vertexSet());
-			breakLoop = true;
-			
-			for (V v: vList) {
+			List<V> toRemove = g.vertexSet().parallelStream()
+					           .filter(v -> g.outDegreeOf(v) < 1 && !v.equals(t) && !v.equals(s))
+					           .collect(Collectors.toList());
+			if (toRemove.size() < 1) {
 				
-				if(g.outDegreeOf(v) < 1 && !v.equals(t) && !v.equals(s)) { 
-					g.removeVertex(v);
-					breakLoop = false;
-				}
+				breakLoop = true;
+			
+			} else {
+				g.removeAllVertices(toRemove);
 				
 			}
 

@@ -3,9 +3,9 @@ export CLASSPATHS="target/classes:/home/$USER/.m2/repository/org/jgrapht/jgrapht
 
 #SNAP
 #java -Xss1G -cp $CLASSPATHS shell.TestSNAP wikivote.txt.gz 10 80 7777
-java -Xss1G -cp $CLASSPATHS shell.TestSNAP slashdot.txt.gz 10 80 7777
-java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP twitter_combined.txt.gz 10 80 7777
-java -Xms8G -Xmx48G -Xmn16G -Xss1G -cp $CLASSPATHS shell.TestSNAP wiki-talk.txt.gz 10 80 7777
+#java -Xss1G -cp $CLASSPATHS shell.TestSNAP slashdot.txt.gz 10 80 7777
+java -Xms48G -Xmx64G -Xss1G -cp $CLASSPATHS shell.TestSNAP wiki-talk.txt.gz 10 50 2021
+java -Xms48G -Xmx64G -Xss1G -cp $CLASSPATHS shell.TestSNAP twitter_combined.txt.gz 10 50 2021
 
 #DIMACS
 #java -Xms24G -Xmx48G -Xmn36G -Xss1G -cp $CLASSPATHS shell.TestDIMACS nyc_dist.gr.gz 10 80 7777
